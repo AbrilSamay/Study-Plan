@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plan de Estudios - Universidad</title>
+  <link rel="stylesheet" href="plan.css">
+</head>
+<body>
+  <header>
+    <h1>Mi Plan de Estudios</h1>
+  </header>
+
+  <section id="plan">
+    <div class="columns">
+      <div class="column">
+        <h2>Clases Generales</h2>
+        <ul id="general-classes">
+          <li>Español</li>
+          <li>Inglés</li>
+          <li>Sociología</li>
+        </ul>
+      </div>
+      <div class="column">
+        <h2>Clases Desbloqueables</h2>
+        <ul id="class-list">
+            <li data-prerequisites="none" class="DesbloqueablesCS">Introducción a la Ingenieria en Sistemas (IS-110)
+              <p>Requisitos: Ninguno</p>
+              <p>UV: 5</p>
+              <button onclick="aprobarClase('Introducción a la Ingenieria en Sistemas (IS-110)')">Aprobar</button>
+            </li>
+
+         
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <script src="plan.js"></script>
+</body>
+</html>

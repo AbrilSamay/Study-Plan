@@ -1,0 +1,73 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+  }
+  
+  header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+  }
+  
+  h1, h2 {
+    margin: 0;
+    padding-bottom: 20px;
+  }
+  
+  #plan {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .columns {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .column {
+    width: 45%;
+  }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  li {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .locked {
+    color: gray;
+    opacity: 0.6;
+  }
+  
+  button {
+    margin-left: 20px;
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: 200px;
+    border-color: aqua;
+    border-radius: 9px;
+    cursor: pointer;
+  }
+  
+  button:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+    opacity: 50%;
+  }
+  
+
+  .DesbloqueablesCS {
+    align-items: start;
+  }
