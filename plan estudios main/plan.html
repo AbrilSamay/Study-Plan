@@ -12,30 +12,90 @@
   </header>
 
   <section id="plan">
-    <div class="columns">
-      <div class="column">
-        <h2>Clases Generales</h2>
-        <ul id="general-classes">
-          <li>Español</li>
-          <li>Inglés</li>
-          <li>Sociología</li>
-        </ul>
-      </div>
-      <div class="column">
-        <h2>Clases Desbloqueables</h2>
-        <ul id="class-list">
-            <li data-prerequisites="none" class="DesbloqueablesCS">Introducción a la Ingenieria en Sistemas (IS-110)
-              <p>Requisitos: Ninguno</p>
-              <p>UV: 5</p>
-              <button onclick="aprobarClase('Introducción a la Ingenieria en Sistemas (IS-110)')">Aprobar</button>
-            </li>
+    <section class="spacer">
 
-         
+      <section id="DS" class="columns">
+        <p >
+          Desbloqueables 
+        </p>
+      </section>
+
+      <section id="GN" class="columns">
+        <p >
+          Generales
+        </p>
+        
+      
+      </section>
+
+    </section>
+   
+    <div class="clases">
+
+      <div id="claseDS" class="clasesColumns">
+        <ul>
+          <li>Matematicas</li>
+        </ul>
+
+        <div class="test">
+          <button class="collapsible"></button>
+          <div class="content">
+            <p>
+              hola me gusta el pan 
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div id="clasesGN" class="clasesColumns">
+        <ul >
+          <li>
+            Espanol
+          </li>
+          <li>
+            Ingles
+          </li>
+          <li>
+            Sociologia
+          </li>
+          <Li>
+            Filosofia
+          </Li>
         </ul>
       </div>
+
     </div>
+
+
   </section>
 
+
+
+
+  
+  <div class="collapsible-container">
+    <div class="test">
+      <button class="collapsible" >Pestaña 1</button>
+    <div class="content">
+        <p>Contenido de la pestaña 1.</p>
+    </div>
+    </div>
+    
+    <button class="collapsible ">Pestaña 2</button>
+    <div class="content">
+        <p>Contenido de la pestaña 2.</p>
+    </div>
+    
+    <button class="collapsible">Pestaña 3</button>
+    <div class="content">
+        <p>Contenido de la pestaña 3.</p>
+    </div>
+</div>
+
+ 
   <script src="plan.js"></script>
+
+
+
 </body>
 </html>

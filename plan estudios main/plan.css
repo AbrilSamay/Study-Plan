@@ -10,64 +10,134 @@ body {
     color: white;
     padding: 10px 0;
     text-align: center;
+    border: 1px solid white;
+    border-radius: 10px;
+    margin-bottom: 10px;
   }
+  #plan {
+  background-color: #95bc97;
+  border: 1px solid transparent;
+  border-radius: 19px;
   
+}
   h1, h2 {
     margin: 0;
-    padding-bottom: 20px;
+    padding: 1%;
   }
   
-  #plan {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  .spacer {
+    display: flex ;
+ 
+    border-radius: 19px;
+    margin-top: 10px;
+   
   }
-  
-  .columns {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .column {
-    width: 45%;
-  }
-  
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  li {
-    margin: 10px 0;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .locked {
-    color: gray;
-    opacity: 0.6;
-  }
-  
-  button {
-    margin-left: 20px;
-    padding: 5px 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: 200px;
-    border-color: aqua;
-    border-radius: 9px;
-    cursor: pointer;
-  }
-  
-  button:disabled {
-    background-color: gray;
-    cursor: not-allowed;
-    opacity: 50%;
-  }
-  
 
-  .DesbloqueablesCS {
-    align-items: start;
+  .columns {
+    border: 3px solid transparent;
+    border-radius: 19px;
+    background-color: #c4c4c4;
+    text-align: center;
   }
+  
+#DS {
+  margin: 20px;
+ width: 70%;
+}
+
+#GN {
+  margin: 20px;
+width: 30%;
+}
+
+ 
+
+li {
+list-style: none;
+border: 1px solid red;
+margin-left: -30px;
+margin-right: 10px;
+border: 1px solid ;
+border-radius: 19px;
+margin-bottom: 10px;
+padding: 10px;
+
+}
+
+.clases {
+display: flex;
+
+}
+
+#claseDS {
+  width: 70%;
+  background-color: white;
+  border: 1px solid transparent;
+  border-radius: 19px;
+ 
+}
+
+#clasesGN {
+  width: 30%;
+  background-color: white;
+  border: 1px solid transparent;
+  border-radius: 19px;
+}
+
+.clasesColumns {
+  margin: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.collapsible-container {
+  width: 300px;
+}
+
+.collapsible {
+  background-color: grey;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  margin-top: 5px;
+}
+
+.collapsible:hover {
+  background-color: aqua;
+}
+
+.content {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  background-color: #f1f1f1;
+  margin-bottom: 5px;
+}
+
+.content p {
+  padding: 18px 0;
+  margin: 0;
+}
+
+.test {
+  border: 1px solid;
+  padding: 0;
+}

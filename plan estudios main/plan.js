@@ -1,16 +1,19 @@
 
 
-const classes = document.querySelectorAll('#class-list li');
 
-function aprobarClase(claseAprobada) {
-  // Desbloquear las clases que tienen como prerrequisito la clase aprobada
-  classes.forEach((clase) => {
-    const prerequisitos = clase.getAttribute('data-prerequisites');
-    if (prerequisitos === claseAprobada) {
-      clase.classList.remove('locked');
-    }
+document.addEventListener("DOMContentLoaded", function () {
+  const coll = document.querySelectorAll(".collapsible");
+
+  coll.forEach(boton => {
+      boton.addEventListener("click", function () {
+          this.classList.toggle("active");
+
+          const content = this.nextElementSibling;
+          if (content.style.maxHeight) {
+              content.style.maxHeight = null;
+          } else {
+              content.style.maxHeight = content.scrollHeight + "px";
+          }
+      });
   });
-  
-  // Deshabilitar el botón de la clase aprobada
-  document.querySelector(`li:contains('${claseAprobada}') button`).disabled = true;
-}
+});
