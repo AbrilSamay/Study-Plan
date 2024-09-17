@@ -64,6 +64,8 @@ margin: 25px;
 border-radius: 19px;
 background-color:#c1c2c2 ;
 padding: 6px;
+border: 3px solid grey;
+
 }
 
 
@@ -71,7 +73,7 @@ padding: 6px;
 .extended {
 border-radius: 19px;
 padding: 10px;
-padding-bottom: 300px;
+padding-bottom: 88px;
 transition: 0.3s ease;
 }
 
@@ -89,15 +91,30 @@ transition: 0.3s ease;
 .requisitos {
   display: flex;
   padding: 10px;
-  background-color: #c6c7c7;
+  background-color: ;
+  border: 1px solid transparent;
+  border-radius: 19px;
+
+}
+
+p {
+  text-align: center;
+}
+.requisitosText {
+  width: 40%;
+}
+.ninguno {
+  width: 30%;
+  background-color: greenyellow;
   border: 1px solid transparent;
   border-radius: 19px;
 }
 
 .aprovada {
-  border: 1px solid black;
-  padding: 10px;
-  display: flex;
+  width: 20%;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
 }
 
 .clases {
@@ -127,11 +144,14 @@ display: flex;
 .clasesColumns {
   margin: 20px;
   transition: 0.3s ease;
+  
 }
 
 .headerDS {
   display: flex;
   margin-top: 15px;
+
+  
 }
 
 .title {
@@ -139,15 +159,25 @@ display: flex;
   text-align: center;
   padding-top: 14px;
   background-color: white;
-  border: 1px solid transparent;
   border-radius: 19px;
   font-size: medium;
 }
 .available {
-  background-color:#66ff8f;
+  background-color:red;
   border: 1px solid transparent;
   border-radius: 19px;
   margin: 4px;
   width: 20%;
   text-align: center;
 }
+
+.checkbox {
+  padding: 100px;
+  height: 50px;
+  size: 60px;
+}
+
+
+
+
+
