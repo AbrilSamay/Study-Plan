@@ -15,15 +15,11 @@ body {
     margin-bottom: 10px;
   }
   #plan {
-  background-color: #95bc97;
+  background-color: #4CAF50;
   border: 1px solid transparent;
   border-radius: 19px;
   
 }
-  h1, h2 {
-    margin: 0;
-    padding: 1%;
-  }
   
   .spacer {
     display: flex ;
@@ -33,35 +29,75 @@ body {
    
   }
 
+  /*Colunmans apartado de arriba */
   .columns {
     border: 3px solid transparent;
     border-radius: 19px;
-    background-color: #c4c4c4;
+    background-color: white;
     text-align: center;
+    transition: 0.3s ease;
   }
   
-#DS {
+  /*Apartado de arriba Desbloqueables*/
+.DS {
   margin: 20px;
- width: 70%;
+  width: 70%;
 }
 
-#GN {
+.GN {
   margin: 20px;
-width: 30%;
+  width: 30%;
 }
 
- 
+.gnExtended {
+  width: 150%;
+  transition: 0.3s ease;
+}
 
-li {
-list-style: none;
-border: 1px solid red;
-margin-left: -30px;
-margin-right: 10px;
-border: 1px solid ;
+
+ h1 {
+  margin: 5px;
+ }
+
+.classs {
+margin: 25px;
 border-radius: 19px;
-margin-bottom: 10px;
-padding: 10px;
+background-color:#c1c2c2 ;
+padding: 6px;
+}
 
+
+
+.extended {
+border-radius: 19px;
+padding: 10px;
+padding-bottom: 300px;
+transition: 0.3s ease;
+}
+
+/*barras abiertas*/
+.notVisible {
+  max-height: 0;
+  overflow: hidden;
+  transition: 0.3s ease;
+  background-color: white;
+  margin: 8px;
+  
+}
+
+/*Dentro de las barras*/
+.requisitos {
+  display: flex;
+  padding: 10px;
+  background-color: #c6c7c7;
+  border: 1px solid transparent;
+  border-radius: 19px;
+}
+
+.aprovada {
+  border: 1px solid black;
+  padding: 10px;
+  display: flex;
 }
 
 .clases {
@@ -69,75 +105,49 @@ display: flex;
 
 }
 
-#claseDS {
+.claseDS {
   width: 70%;
   background-color: white;
-  border: 1px solid transparent;
   border-radius: 19px;
  
 }
 
-#clasesGN {
+.clasesGN {
   width: 30%;
   background-color: white;
-  border: 1px solid transparent;
+
   border-radius: 19px;
+}
+
+.clasesGNExtended{
+  width: 150%;
+  transition: 0.3s ease;
 }
 
 .clasesColumns {
   margin: 20px;
+  transition: 0.3s ease;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-.collapsible-container {
-  width: 300px;
+.headerDS {
+  display: flex;
+  margin-top: 15px;
 }
 
-.collapsible {
-  background-color: grey;
-  color: white;
-  cursor: pointer;
-  padding: 18px;
-  width: 100%;
-  border: none;
-  text-align: left;
-  outline: none;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
-  margin-top: 5px;
+.title {
+  width: 80%;
+  text-align: center;
+  padding-top: 14px;
+  background-color: white;
+  border: 1px solid transparent;
+  border-radius: 19px;
+  font-size: medium;
 }
-
-.collapsible:hover {
-  background-color: aqua;
-}
-
-.content {
-  padding: 0 18px;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease-out;
-  background-color: #f1f1f1;
-  margin-bottom: 5px;
-}
-
-.content p {
-  padding: 18px 0;
-  margin: 0;
-}
-
-.test {
-  border: 1px solid;
-  padding: 0;
+.available {
+  background-color:#66ff8f;
+  border: 1px solid transparent;
+  border-radius: 19px;
+  margin: 4px;
+  width: 20%;
+  text-align: center;
 }

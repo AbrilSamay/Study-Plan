@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expandir Varias Secciones</title>
+  <style>
+    .big-button {
+      display: block;
+      width: 80%;
+      height: 100px;
+      margin: 20px auto;
+      background-color: #4CAF50;
+      color: white;
+      text-align: center;
+      line-height: 100px;
+      font-size: 24px;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: background-color 0.3s;
+    }
+
+    .big-button:hover {
+      background-color: #45a049;
+    }
+
+    /* Contenedor de información oculta */
+    .more-info {
+      width: 80%;
+      margin: 20px auto;
+      padding: 0 15px;
+      background-color: #f1f1f1;
+      border-radius: 8px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+    }
+
+    .expanded {
+      max-height: 300px;
+      padding: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sección 1 -->
+  <div class="big-button">
+    Haz clic para mostrar más información (Sección 1)
+  </div>
+  <div class="more-info">
+    <p>¡Aquí tienes más información de la sección 1! Puedes ocultarla o mostrarla haciendo clic de nuevo.</p>
+  </div>
+
+  <!-- Sección 2 -->
+  <div class="big-button">
+    Haz clic para mostrar más información (Sección 2)
+  </div>
+  <div class="more-info">
+    <p>¡Aquí tienes más información de la sección 2! Puedes ocultarla o mostrarla haciendo clic de nuevo.</p>
+  </div>
+
+  <!-- Sección 3 -->
+  <div class="big-button">
+    Haz clic para mostrar más información (Sección 3)
+  </div>
+  <div class="more-info">
+    <p>¡Aquí tienes más información de la sección 3! Puedes ocultarla o mostrarla haciendo clic de nuevo.</p>
+  </div>
+
+  <script>
+    // Selecciona todos los botones y las secciones de información
+    const buttons = document.querySelectorAll('.big-button');
+    const infoSections = document.querySelectorAll('.more-info');
+
+    // Itera sobre todos los botones
+    buttons.forEach((button, index) => {
+      button.addEventListener('click', function() {
+        // Alterna la expansión/contracción de la sección correspondiente
+        infoSections[index].classList.toggle('expanded');
+      });
+    });
+  </script>
+
+</body>
+</html>
