@@ -60,7 +60,7 @@ body {
  }
 
 .classs {
-margin: 25px;
+margin: 15px;
 border-radius: 19px;
 background-color:#c1c2c2 ;
 padding: 6px;
@@ -72,8 +72,7 @@ border: 3px solid grey;
 
 .extended {
 border-radius: 19px;
-padding: 10px;
-padding-bottom: 88px;
+padding-bottom: 110px;
 transition: 0.3s ease;
 }
 
@@ -83,7 +82,7 @@ transition: 0.3s ease;
   overflow: hidden;
   transition: 0.3s ease;
   background-color: white;
-  margin: 8px;
+  margin: 10px;
   
 }
 
@@ -107,6 +106,7 @@ p {
   background-color: greenyellow;
   border: 1px solid transparent;
   border-radius: 19px;
+  height: 40%;
 }
 
 .aprovada {
@@ -148,9 +148,7 @@ display: flex;
 
 .headerDS {
   display: flex;
-  margin-top: 15px;
 
-  
 }
 
 .title {
