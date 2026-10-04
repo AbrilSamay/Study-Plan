@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript Quest — Mis pequeñas victorias</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #121a2f;
+      --panel-2: #18223d;
+      --text: #edf2ff;
+      --muted: #9eabd0;
+      --accent: #f7df1e;
+      --accent-2: #7dd3fc;
+      --good: #86efac;
+      --border: #283657;
+      --danger: #fda4af;
+      --shadow: 0 18px 45px rgba(0,0,0,.28);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(247,223,30,.09), transparent 25rem),
+        radial-gradient(circle at top left, rgba(125,211,252,.08), transparent 28rem),
+        var(--bg);
+      color: var(--text);
+    }
+
+    button, input, textarea, select { font: inherit; }
+
+    .shell {
+      width: min(1120px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 34px 0 70px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.35fr .65fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .card {
+      background: rgba(18,26,47,.92);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-main { padding: 28px; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent);
+      font-weight: 800;
+      font-size: .85rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 10px 0 8px;
+      font-size: clamp(2rem, 5vw, 3.7rem);
+      line-height: .98;
+      letter-spacing: -.055em;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 62ch;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .progress-card {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .big-progress {
+      font-size: 3rem;
+      font-weight: 900;
+      letter-spacing: -.05em;
+      margin: 4px 0 2px;
+    }
+
+    .muted { color: var(--muted); }
+
+    .bar {
+      height: 12px;
+      background: #09101f;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 12px 0 8px;
+    }
+
+    .bar > span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      border-radius: inherit;
+      transition: width .35s ease;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px;
+      margin-bottom: 18px;
+    }
+
+    .toolbar-left, .toolbar-right {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      align-items: center;
+    }
+
+    .btn {
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+      color: var(--text);
+      padding: 10px 13px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 750;
+      transition: transform .15s ease, border-color .15s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); border-color: var(--accent-2); }
+    .btn.primary { background: var(--accent); color: #151515; border-color: var(--accent); }
+    .btn.danger { color: var(--danger); }
+
+    .focus-card {
+      padding: 18px;
+      margin-bottom: 18px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .focus-title {
+      margin: 4px 0 0;
+      font-size: 1.15rem;
+      font-weight: 850;
+    }
+
+    .module {
+      margin: 13px 0;
+      overflow: hidden;
+    }
+
+    .module-header {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      padding: 18px 20px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 14px;
+      text-align: left;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .level {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      color: #101010;
+      background: var(--accent);
+      font-weight: 950;
+    }
+
+    .module-title {
+      font-size: 1.1rem;
+      font-weight: 850;
+      margin-bottom: 3px;
+    }
+
+    .module-meta {
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .module-body {
+      border-top: 1px solid var(--border);
+      padding: 10px 18px 18px;
+    }
+
+    .module.collapsed .module-body { display: none; }
+
+    .victory {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      padding: 13px 7px;
+      align-items: start;
+      border-bottom: 1px dashed rgba(158,171,208,.18);
+    }
+
+    .victory:last-child { border-bottom: 0; }
+
+    .victory input[type="checkbox"] {
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      margin: 1px 0 0;
+      border: 2px solid #536487;
+      border-radius: 7px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      background: #0d1426;
+    }
+
+    .victory input[type="checkbox"]:checked {
+      background: var(--good);
+      border-color: var(--good);
+    }
+
+    .victory input[type="checkbox"]:checked::after {
+      content: "✓";
+      color: #06240f;
+      font-weight: 1000;
+      font-size: 15px;
+    }
+
+    .victory.done .victory-name {
+      color: var(--muted);
+      text-decoration: line-through;
+      text-decoration-thickness: 2px;
+    }
+
+    .victory-name {
+      font-weight: 780;
+      line-height: 1.35;
+    }
+
+    .victory-test {
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: .92rem;
+      margin-top: 4px;
+    }
+
+    .xp {
+      font-size: .78rem;
+      font-weight: 850;
+      color: var(--accent);
+      background: rgba(247,223,30,.08);
+      border: 1px solid rgba(247,223,30,.22);
+      padding: 5px 7px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .notes {
+      margin-top: 20px;
+      padding: 20px;
+    }
+
+    .notes textarea {
+      width: 100%;
+      min-height: 125px;
+      resize: vertical;
+      margin-top: 10px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: #0b1223;
+      color: var(--text);
+      padding: 13px;
+      line-height: 1.5;
+      outline: none;
+    }
+
+    .notes textarea:focus { border-color: var(--accent-2); }
+
+    .philosophy {
+      padding: 18px 20px;
+      margin-top: 18px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .philosophy strong { color: var(--text); }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      transform: translate(-50%, 30px);
+      opacity: 0;
+      pointer-events: none;
+      background: #f7df1e;
+      color: #111;
+      font-weight: 900;
+      padding: 13px 18px;
+      border-radius: 999px;
+      box-shadow: 0 16px 40px rgba(0,0,0,.35);
+      transition: .25s ease;
+      z-index: 100;
+      text-align: center;
+      max-width: min(92vw, 620px);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .confetti {
+      position: fixed;
+      width: 8px;
+      height: 13px;
+      top: -20px;
+      z-index: 99;
+      pointer-events: none;
+      animation: fall 1.25s linear forwards;
+    }
+
+    @keyframes fall {
+      to { transform: translate(var(--drift), 105vh) rotate(720deg); opacity: .4; }
+    }
+
+    .course-link {
+      color: var(--accent-2);
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    @media (max-width: 760px) {
+      .hero { grid-template-columns: 1fr; }
+      .focus-card { grid-template-columns: 1fr; }
+      .module-header { grid-template-columns: auto 1fr; }
+      .module-header .module-count { grid-column: 2; }
+      .victory { grid-template-columns: auto 1fr; }
+      .xp { grid-column: 2; justify-self: start; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="card hero-main">
+        <div class="eyebrow">⚡ JavaScript Quest</div>
+        <h1>Pequeñas victorias.<br>Comprensión real.</h1>
+        <p>
+          No estás compitiendo contra un calendario. Cada casilla significa:
+          <strong>“puedo demostrar que entiendo esto”</strong>. Si algo tarda tres días,
+          sigue siendo una victoria.
+        </p>
+      </div>
+
+      <aside class="card progress-card">
+        <div class="muted">Progreso total</div>
+        <div class="big-progress" id="totalPercent">0%</div>
+        <div class="bar"><span id="totalBar"></span></div>
+        <div class="muted" id="totalText">0 de 0 victorias · 0 XP</div>
+      </aside>
+    </section>
+
+    <section class="card toolbar">
+      <div class="toolbar-left">
+        <button class="btn primary" id="nextBtn">🎯 Ir a mi próxima victoria</button>
+        <a class="btn course-link" href="https://aprendejavascript.org/" target="_blank" rel="noreferrer">Abrir curso ↗</a>
+      </div>
+      <div class="toolbar-right">
+        <button class="btn" id="exportBtn">Exportar progreso</button>
+        <label class="btn" for="importInput">Importar progreso</label>
+        <input id="importInput" type="file" accept=".json" hidden>
+        <button class="btn danger" id="resetBtn">Reiniciar</button>
+      </div>
+    </section>
+
+    <section class="card focus-card">
+      <div>
+        <div class="muted">Ahora mismo solo importa esto</div>
+        <div class="focus-title" id="focusTitle">Tu primera victoria aparecerá aquí.</div>
+      </div>
+      <div class="xp" id="focusXp">+0 XP</div>
+    </section>
+
+    <section id="modules"></section>
+
+    <section class="card notes">
+      <strong>🧠 Diario de aprendizaje</strong>
+      <div class="muted">Escribe errores que entendiste, cosas que antes te confundían o una explicación con tus propias palabras.</div>
+      <textarea id="notes" placeholder="Ejemplo: Hoy entendí que = no significa 'es igual a' como en matemáticas; significa asignar un valor..."></textarea>
+    </section>
+
+    <section class="card philosophy">
+      <strong>Regla de aprobación:</strong> no marques una victoria solo porque viste el video.
+      Márcala cuando puedas explicarla o demostrarla sin copiar. No hay rachas, no pierdes puntos y no hay fecha límite.
+      <strong>El objetivo es construir un cerebro de programador, no terminar rápido.</strong>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const curriculum = [
+      {
+        level: 0,
+        title: "Entender qué hace una computadora",
+        subtitle: "Modelo mental antes de memorizar sintaxis.",
+        victories: [
+          ["Puedo explicar qué es una instrucción", "Explícalo sin usar la palabra «código» como respuesta.", 10],
+          ["Entiendo expresión vs. resultado", "Predice qué produce 2 + 2 * 3 antes de ejecutarlo.", 10],
+          ["Entiendo qué significa asignar", "Explica por qué x = x + 1 funciona en programación aunque no en álgebra.", 15],
+          ["Sé usar la consola para observar un programa", "Abre DevTools y usa console.log() para inspeccionar 3 valores distintos.", 10],
+          ["Puedo leer código línea por línea", "Toma 5 líneas sencillas y narra qué cambia después de cada una.", 20]
+        ]
+      },
+      {
+        level: 1,
+        title: "Valores, variables y tipos",
+        subtitle: "Representar información con intención.",
+        victories: [
+          ["Distingo let, const y var", "Puedo decir cuál usaría y por qué; evito var salvo que entienda el motivo.", 15],
+          ["Domino strings", "Creo, concateno y transformo texto sin copiar ejemplos.", 15],
+          ["Domino template strings", "Construyo una frase con ${...} usando al menos 3 valores.", 10],
+          ["Domino numbers y operadores básicos", "Resuelvo precio × cantidad, descuento y total.", 15],
+          ["Entiendo booleans", "Puedo convertir una condición real en true/false.", 10],
+          ["Distingo undefined, null y NaN", "Creo un ejemplo intencional de cada uno y explico la diferencia.", 20],
+          ["Sé inspeccionar tipos", "Uso typeof y sé explicar al menos una rareza de sus resultados.", 10]
+        ]
+      },
+      {
+        level: 2,
+        title: "Funciones: crear comportamiento",
+        subtitle: "Entradas → proceso → salida.",
+        victories: [
+          ["Entiendo por qué existen las funciones", "Identifico código repetido y lo convierto en una función.", 15],
+          ["Distingo parámetro y argumento", "Lo explico con un ejemplo propio.", 10],
+          ["Entiendo return", "Predigo qué pasa antes y después de un return.", 20],
+          ["Entiendo scope básico", "Predigo cuáles variables se pueden leer dentro y fuera de una función.", 20],
+          ["Creo funciones reutilizables", "Hago una función que calcule un total sin valores fijos dentro.", 20],
+          ["Puedo depurar una función", "Encuentro y arreglo por mi cuenta una función con un resultado incorrecto.", 25]
+        ]
+      },
+      {
+        level: 3,
+        title: "Arrays y objetos",
+        subtitle: "Organizar información real.",
+        victories: [
+          ["Sé cuándo usar un array", "Represento una lista de vehículos, nombres o precios.", 15],
+          ["Puedo leer y modificar arrays", "Accedo, agrego y retiro elementos conscientemente.", 15],
+          ["Sé cuándo usar un objeto", "Modelo una entidad con varias propiedades.", 15],
+          ["Accedo y modifico propiedades", "Uso notación de punto y corchetes y sé cuándo sirven.", 15],
+          ["Entiendo valores vs. referencias", "Predigo por qué cambiar una propiedad puede afectar al objeto original.", 30],
+          ["Puedo modelar datos combinados", "Creo un array de objetos con al menos 3 elementos y 4 propiedades cada uno.", 25]
+        ]
+      },
+      {
+        level: 4,
+        title: "Decisiones y repetición",
+        subtitle: "Hacer que el programa piense en caminos.",
+        victories: [
+          ["Entiendo operadores de comparación y lógicos", "Puedo predecir condiciones con ===, >, &&, || y !.", 20],
+          ["Construyo if / else con intención", "Resuelvo una decisión de 3 caminos sin copiar.", 20],
+          ["Entiendo truthy y falsy", "Predigo al menos 6 valores y luego verifico.", 20],
+          ["Sé elegir un loop", "Explico cuándo usaría for, while o for...of.", 20],
+          ["Puedo seguir un loop en papel", "Anoto el valor de las variables en cada iteración.", 25],
+          ["Uso break y continue conscientemente", "Creo un ejemplo donde cada uno sea realmente útil.", 15],
+          ["Puedo resolver un problema combinando condiciones + loop", "Ejemplo: filtrar manualmente números pares mayores que 10.", 35]
+        ]
+      },
+      {
+        level: 5,
+        title: "Lógica de programación",
+        subtitle: "Pasar de «sé sintaxis» a «sé resolver».",
+        victories: [
+          ["Divido un problema en pasos antes de programar", "Escribo pseudocódigo de una solución sin tocar JavaScript.", 25],
+          ["Resuelvo strings sin tutorial", "Invierto, cuento o transformo texto usando mi propia estrategia.", 30],
+          ["Resuelvo arrays sin tutorial", "Encuentro máximo/mínimo, duplicados o filtros con razonamiento propio.", 30],
+          ["Puedo detectar un caso límite", "Encuentro al menos 2 entradas que podrían romper mi solución.", 25],
+          ["Puedo mejorar una solución que ya funciona", "Primero logro que funcione; después la hago más clara.", 30],
+          ["Completo un ejercicio difícil sin pedir la solución", "Puedo pedir pistas, pero la implementación final es mía.", 50]
+        ]
+      },
+      {
+        level: 6,
+        title: "JavaScript más profundo",
+        subtitle: "Entender el lenguaje, no solo usarlo.",
+        victories: [
+          ["Entiendo destructuring", "Extraigo datos de arrays y objetos sin perderme.", 15],
+          ["Entiendo rest y spread", "Explico por qué ... hace cosas distintas según el contexto.", 25],
+          ["Uso arrow functions sin confundirlas", "Convierto una función normal y explico qué cambia.", 20],
+          ["Entiendo módulos import/export", "Separo una utilidad en otro archivo y la reutilizo.", 25],
+          ["Comprendo prototipos a nivel básico", "Puedo explicar de dónde busca JS un método que no está directamente en el objeto.", 35],
+          ["Entiendo clases como abstracción sobre prototipos", "Creo una clase sencilla y sé qué está ocultando la sintaxis.", 30],
+          ["Entiendo this en casos básicos", "Predigo a qué objeto apunta this en varios contextos sencillos.", 40]
+        ]
+      },
+      {
+        level: 7,
+        title: "Asincronía y tiempo",
+        subtitle: "Entender por qué JavaScript no siempre ocurre «en orden».",
+        victories: [
+          ["Entiendo código síncrono vs. asíncrono", "Puedo dar un ejemplo cotidiano y uno en código.", 20],
+          ["Entiendo setTimeout y setInterval", "Predigo el orden de varios console.log con temporizadores.", 20],
+          ["Tengo un modelo básico del event loop", "Explico call stack, cola y cuándo se ejecuta un callback.", 40],
+          ["Entiendo callbacks", "Escribo una función que recibe otra función y sé por qué.", 25],
+          ["Entiendo Promises", "Distingo pending, fulfilled y rejected sin memorizar una definición.", 35],
+          ["Uso async/await con errores", "Hago una operación async con try/catch.", 35]
+        ]
+      },
+      {
+        level: 8,
+        title: "DOM y eventos",
+        subtitle: "Hacer que JavaScript controle una página real.",
+        victories: [
+          ["Selecciono elementos del DOM", "Uso querySelector/querySelectorAll y explico qué obtengo.", 15],
+          ["Leo y cambio contenido", "Modifico texto, atributos y clases desde JS.", 20],
+          ["Creo elementos desde JavaScript", "Genero una pequeña lista a partir de un array.", 30],
+          ["Entiendo eventos", "Conecto un click a una función sin usar HTML inline.", 20],
+          ["Entiendo event y target", "Identifico qué elemento produjo un evento.", 25],
+          ["Entiendo bubbling y delegación", "Manejo una lista dinámica con un solo listener.", 40],
+          ["Construyo un mini proyecto DOM solo", "Ejemplo: lista de tareas, contador o filtro interactivo.", 60]
+        ]
+      },
+      {
+        level: 9,
+        title: "Datos externos y APIs",
+        subtitle: "Tu programa empieza a hablar con el mundo.",
+        victories: [
+          ["Entiendo JSON", "Convierto entre objeto JS y JSON y explico por qué no son exactamente lo mismo.", 20],
+          ["Entiendo HTTP a nivel práctico", "Sé qué significan request, response, método y status code.", 30],
+          ["Hago un GET con fetch", "Obtengo datos públicos y los veo en consola.", 25],
+          ["Renderizo datos de una API", "Muestro resultados reales en el DOM.", 40],
+          ["Manejo loading y errores", "La interfaz no queda muda si la petición falla.", 35],
+          ["Entiendo CRUD", "Relaciono Create/Read/Update/Delete con POST/GET/PUT-PATCH/DELETE.", 35],
+          ["Construyo un mini cliente de API", "Buscar, mostrar y manejar errores sin copiar un proyecto completo.", 70]
+        ]
+      },
+      {
+        level: 10,
+        title: "Aplicaciones y autonomía",
+        subtitle: "De estudiante de sintaxis a constructor.",
+        victories: [
+          ["Organizo un proyecto en módulos", "Puedo decidir qué responsabilidades separar.", 30],
+          ["Entiendo estado de una interfaz", "Identifico qué datos determinan lo que el usuario ve.", 35],
+          ["Puedo renderizar desde estado", "Cambio datos y actualizo la UI de forma predecible.", 40],
+          ["Entiendo el concepto de SPA", "Explico qué cambia frente a navegar entre páginas tradicionales.", 30],
+          ["Sé depurar con DevTools", "Uso breakpoints, consola y Network para encontrar un problema real.", 45],
+          ["Leo documentación para aprender algo nuevo", "Implemento una API o método que nunca me enseñaron directamente.", 60],
+          ["Construyo una aplicación útil para mí", "Planifico, implemento, depuro y puedo explicar las decisiones principales.", 100],
+          ["Puedo leer código generado por IA críticamente", "No acepto código por fe: puedo explicarlo, modificarlo y detectar riesgos o errores.", 80]
+        ]
+      }
+    ];
+
+    const stateKey = "jsQuestProgressV1";
+    const notesKey = "jsQuestNotesV1";
+    let state = JSON.parse(localStorage.getItem(stateKey) || "{}");
+
+    const modulesEl = document.getElementById("modules");
+    const totalPercent = document.getElementById("totalPercent");
+    const totalBar = document.getElementById("totalBar");
+    const totalText = document.getElementById("totalText");
+    const focusTitle = document.getElementById("focusTitle");
+    const focusXp = document.getElementById("focusXp");
+    const notes = document.getElementById("notes");
+    const toast = document.getElementById("toast");
+
+    notes.value = localStorage.getItem(notesKey) || "";
+    notes.addEventListener("input", () => localStorage.setItem(notesKey, notes.value));
+
+    function idFor(level, index) {
+      return `L${level}-V${index}`;
+    }
+
+    function allVictories() {
+      return curriculum.flatMap(module =>
+        module.victories.map((victory, index) => ({
+          id: idFor(module.level, index),
+          module,
+          index,
+          victory
+        }))
+      );
+    }
+
+    function render() {
+      modulesEl.innerHTML = "";
+
+      curriculum.forEach(module => {
+        const completed = module.victories.filter((_, i) => state[idFor(module.level, i)]).length;
+        const percent = Math.round((completed / module.victories.length) * 100);
+
+        const section = document.createElement("section");
+        section.className = "card module";
+        section.dataset.level = module.level;
+
+        const header = document.createElement("button");
+        header.className = "module-header";
+        header.innerHTML = `
+          <div class="level">${module.level}</div>
+          <div>
+            <div class="module-title">${module.title}</div>
+            <div class="module-meta">${module.subtitle}</div>
+          </div>
+          <div class="module-count">${completed}/${module.victories.length} · ${percent}%</div>
+        `;
+        header.addEventListener("click", () => section.classList.toggle("collapsed"));
+
+        const body = document.createElement("div");
+        body.className = "module-body";
+
+        module.victories.forEach((victory, i) => {
+          const [name, test, xp] = victory;
+          const id = idFor(module.level, i);
+          const done = !!state[id];
+
+          const row = document.createElement("label");
+          row.className = `victory ${done ? "done" : ""}`;
+          row.id = id;
+          row.innerHTML = `
+            <input type="checkbox" ${done ? "checked" : ""} aria-label="${name}">
+            <div>
+              <div class="victory-name">${name}</div>
+              <div class="victory-test"><strong>Prueba:</strong> ${test}</div>
+            </div>
+            <div class="xp">+${xp} XP</div>
+          `;
+
+          const checkbox = row.querySelector("input");
+          checkbox.addEventListener("change", () => {
+            state[id] = checkbox.checked;
+            localStorage.setItem(stateKey, JSON.stringify(state));
+
+            if (checkbox.checked) {
+              celebrate(`🏆 Victoria desbloqueada: ${name}`, completed === module.victories.length - 1);
+            }
+            render();
+          });
+
+          body.appendChild(row);
+        });
+
+        section.appendChild(header);
+        section.appendChild(body);
+        modulesEl.appendChild(section);
+      });
+
+      updateSummary();
+    }
+
+    function updateSummary() {
+      const items = allVictories();
+      const doneItems = items.filter(item => state[item.id]);
+      const maxXp = items.reduce((sum, item) => sum + item.victory[2], 0);
+      const earnedXp = doneItems.reduce((sum, item) => sum + item.victory[2], 0);
+      const percent = items.length ? Math.round(doneItems.length / items.length * 100) : 0;
+
+      totalPercent.textContent = `${percent}%`;
+      totalBar.style.width = `${percent}%`;
+      totalText.textContent = `${doneItems.length} de ${items.length} victorias · ${earnedXp}/${maxXp} XP`;
+
+      const next = items.find(item => !state[item.id]);
+      if (next) {
+        focusTitle.textContent = `Nivel ${next.module.level}: ${next.victory[0]}`;
+        focusXp.textContent = `+${next.victory[2]} XP`;
+      } else {
+        focusTitle.textContent = "🏆 Completaste todas las victorias. Ahora toca construir.";
+        focusXp.textContent = "LEGEND";
+      }
+    }
+
+    function celebrate(message, moduleComplete = false) {
+      toast.textContent = moduleComplete ? `🎉 ¡MÓDULO COMPLETADO! ${message}` : message;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2600);
+
+      const pieces = moduleComplete ? 70 : 24;
+      for (let i = 0; i < pieces; i++) {
+        const piece = document.createElement("div");
+        piece.className = "confetti";
+        piece.style.left = `${Math.random() * 100}vw`;
+        piece.style.background = ["#f7df1e", "#7dd3fc", "#86efac", "#fda4af", "#c4b5fd"][Math.floor(Math.random()*5)];
+        piece.style.setProperty("--drift", `${(Math.random() - .5) * 220}px`);
+        piece.style.animationDelay = `${Math.random() * .25}s`;
+        document.body.appendChild(piece);
+        setTimeout(() => piece.remove(), 1700);
+      }
+    }
+
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      const next = allVictories().find(item => !state[item.id]);
+      if (!next) return celebrate("🏆 Ya completaste todo el mapa.", true);
+
+      const el = document.getElementById(next.id);
+      const moduleEl = el.closest(".module");
+      moduleEl.classList.remove("collapsed");
+      setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "center" }), 20);
+    });
+
+    document.getElementById("exportBtn").addEventListener("click", () => {
+      const data = {
+        version: 1,
+        exportedAt: new Date().toISOString(),
+        progress: state,
+        notes: notes.value
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "javascript-quest-progreso.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById("importInput").addEventListener("change", async event => {
+      const file = event.target.files[0];
+      if (!file) return;
+      try {
+        const data = JSON.parse(await file.text());
+        state = data.progress || {};
+        notes.value = data.notes || "";
+        localStorage.setItem(stateKey, JSON.stringify(state));
+        localStorage.setItem(notesKey, notes.value);
+        render();
+        celebrate("✅ Progreso importado correctamente");
+      } catch {
+        alert("No pude leer ese archivo de progreso.");
+      }
+      event.target.value = "";
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      const confirmation = confirm("¿Seguro? Esto borrará todas las casillas y tus notas de este navegador.");
+      if (!confirmation) return;
+      state = {};
+      notes.value = "";
+      localStorage.removeItem(stateKey);
+      localStorage.removeItem(notesKey);
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
