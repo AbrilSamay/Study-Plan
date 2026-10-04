@@ -161,6 +161,25 @@
       font-size: 1.15rem;
       font-weight: 850;
     }
+    .focus-path { color: var(--accent-2); margin-top: 7px; font-size: .9rem; font-weight: 750; }
+    .focus-secondary { color: var(--muted); margin-top: 4px; font-size: .84rem; }
+    .course-route {
+      margin: 8px 0 12px;
+      padding: 11px 13px;
+      border: 1px solid rgba(125,211,252,.18);
+      background: rgba(125,211,252,.045);
+      border-radius: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: .86rem;
+    }
+    .course-route strong { color: var(--accent-2); }
+    .lesson-tag {
+      margin-top: 5px;
+      font-size: .84rem;
+      color: var(--accent-2);
+      font-weight: 700;
+    }
 
     .module {
       margin: 13px 0;
@@ -436,7 +455,7 @@
     <section class="card sync-card">
       <div class="sync-info">
         <div class="sync-status"><span class="sync-dot"></span><span id="syncStatus">Sincronizando…</span></div>
-        <div class="sync-sub" id="syncSub">Tu progreso se guarda en la nube.</div>
+        <div class="sync-sub" id="syncSub">Sincronización automática entre PC y teléfono.</div>
       </div>
       <div class="sync-actions">
         <button class="btn" id="shareBtn">📱 Vincular otro dispositivo</button>
@@ -448,6 +467,8 @@
       <div>
         <div class="muted">Ahora mismo solo importa esto</div>
         <div class="focus-title" id="focusTitle">Tu primera victoria aparecerá aquí.</div>
+        <div class="focus-path" id="focusPath"></div>
+        <div class="focus-secondary" id="focusSecondary"></div>
       </div>
       <div class="xp" id="focusXp">+0 XP</div>
     </section>
@@ -471,155 +492,1076 @@
 
   <script>
     const curriculum = [
-      {
-        level: 0,
-        title: "Entender qué hace una computadora",
-        subtitle: "Modelo mental antes de memorizar sintaxis.",
-        victories: [
-          ["Puedo explicar qué es una instrucción", "Explícalo sin usar la palabra «código» como respuesta.", 10],
-          ["Entiendo expresión vs. resultado", "Predice qué produce 2 + 2 * 3 antes de ejecutarlo.", 10],
-          ["Entiendo qué significa asignar", "Explica por qué x = x + 1 funciona en programación aunque no en álgebra.", 15],
-          ["Sé usar la consola para observar un programa", "Abre DevTools y usa console.log() para inspeccionar 3 valores distintos.", 10],
-          ["Puedo leer código línea por línea", "Toma 5 líneas sencillas y narra qué cambia después de cada una.", 20]
-        ]
-      },
-      {
-        level: 1,
-        title: "Valores, variables y tipos",
-        subtitle: "Representar información con intención.",
-        victories: [
-          ["Distingo let, const y var", "Puedo decir cuál usaría y por qué; evito var salvo que entienda el motivo.", 15],
-          ["Domino strings", "Creo, concateno y transformo texto sin copiar ejemplos.", 15],
-          ["Domino template strings", "Construyo una frase con ${...} usando al menos 3 valores.", 10],
-          ["Domino numbers y operadores básicos", "Resuelvo precio × cantidad, descuento y total.", 15],
-          ["Entiendo booleans", "Puedo convertir una condición real en true/false.", 10],
-          ["Distingo undefined, null y NaN", "Creo un ejemplo intencional de cada uno y explico la diferencia.", 20],
-          ["Sé inspeccionar tipos", "Uso typeof y sé explicar al menos una rareza de sus resultados.", 10]
-        ]
-      },
-      {
-        level: 2,
-        title: "Funciones: crear comportamiento",
-        subtitle: "Entradas → proceso → salida.",
-        victories: [
-          ["Entiendo por qué existen las funciones", "Identifico código repetido y lo convierto en una función.", 15],
-          ["Distingo parámetro y argumento", "Lo explico con un ejemplo propio.", 10],
-          ["Entiendo return", "Predigo qué pasa antes y después de un return.", 20],
-          ["Entiendo scope básico", "Predigo cuáles variables se pueden leer dentro y fuera de una función.", 20],
-          ["Creo funciones reutilizables", "Hago una función que calcule un total sin valores fijos dentro.", 20],
-          ["Puedo depurar una función", "Encuentro y arreglo por mi cuenta una función con un resultado incorrecto.", 25]
-        ]
-      },
-      {
-        level: 3,
-        title: "Arrays y objetos",
-        subtitle: "Organizar información real.",
-        victories: [
-          ["Sé cuándo usar un array", "Represento una lista de vehículos, nombres o precios.", 15],
-          ["Puedo leer y modificar arrays", "Accedo, agrego y retiro elementos conscientemente.", 15],
-          ["Sé cuándo usar un objeto", "Modelo una entidad con varias propiedades.", 15],
-          ["Accedo y modifico propiedades", "Uso notación de punto y corchetes y sé cuándo sirven.", 15],
-          ["Entiendo valores vs. referencias", "Predigo por qué cambiar una propiedad puede afectar al objeto original.", 30],
-          ["Puedo modelar datos combinados", "Creo un array de objetos con al menos 3 elementos y 4 propiedades cada uno.", 25]
-        ]
-      },
-      {
-        level: 4,
-        title: "Decisiones y repetición",
-        subtitle: "Hacer que el programa piense en caminos.",
-        victories: [
-          ["Entiendo operadores de comparación y lógicos", "Puedo predecir condiciones con ===, >, &&, || y !.", 20],
-          ["Construyo if / else con intención", "Resuelvo una decisión de 3 caminos sin copiar.", 20],
-          ["Entiendo truthy y falsy", "Predigo al menos 6 valores y luego verifico.", 20],
-          ["Sé elegir un loop", "Explico cuándo usaría for, while o for...of.", 20],
-          ["Puedo seguir un loop en papel", "Anoto el valor de las variables en cada iteración.", 25],
-          ["Uso break y continue conscientemente", "Creo un ejemplo donde cada uno sea realmente útil.", 15],
-          ["Puedo resolver un problema combinando condiciones + loop", "Ejemplo: filtrar manualmente números pares mayores que 10.", 35]
-        ]
-      },
-      {
-        level: 5,
-        title: "Lógica de programación",
-        subtitle: "Pasar de «sé sintaxis» a «sé resolver».",
-        victories: [
-          ["Divido un problema en pasos antes de programar", "Escribo pseudocódigo de una solución sin tocar JavaScript.", 25],
-          ["Resuelvo strings sin tutorial", "Invierto, cuento o transformo texto usando mi propia estrategia.", 30],
-          ["Resuelvo arrays sin tutorial", "Encuentro máximo/mínimo, duplicados o filtros con razonamiento propio.", 30],
-          ["Puedo detectar un caso límite", "Encuentro al menos 2 entradas que podrían romper mi solución.", 25],
-          ["Puedo mejorar una solución que ya funciona", "Primero logro que funcione; después la hago más clara.", 30],
-          ["Completo un ejercicio difícil sin pedir la solución", "Puedo pedir pistas, pero la implementación final es mía.", 50]
-        ]
-      },
-      {
-        level: 6,
-        title: "JavaScript más profundo",
-        subtitle: "Entender el lenguaje, no solo usarlo.",
-        victories: [
-          ["Entiendo destructuring", "Extraigo datos de arrays y objetos sin perderme.", 15],
-          ["Entiendo rest y spread", "Explico por qué ... hace cosas distintas según el contexto.", 25],
-          ["Uso arrow functions sin confundirlas", "Convierto una función normal y explico qué cambia.", 20],
-          ["Entiendo módulos import/export", "Separo una utilidad en otro archivo y la reutilizo.", 25],
-          ["Comprendo prototipos a nivel básico", "Puedo explicar de dónde busca JS un método que no está directamente en el objeto.", 35],
-          ["Entiendo clases como abstracción sobre prototipos", "Creo una clase sencilla y sé qué está ocultando la sintaxis.", 30],
-          ["Entiendo this en casos básicos", "Predigo a qué objeto apunta this en varios contextos sencillos.", 40]
-        ]
-      },
-      {
-        level: 7,
-        title: "Asincronía y tiempo",
-        subtitle: "Entender por qué JavaScript no siempre ocurre «en orden».",
-        victories: [
-          ["Entiendo código síncrono vs. asíncrono", "Puedo dar un ejemplo cotidiano y uno en código.", 20],
-          ["Entiendo setTimeout y setInterval", "Predigo el orden de varios console.log con temporizadores.", 20],
-          ["Tengo un modelo básico del event loop", "Explico call stack, cola y cuándo se ejecuta un callback.", 40],
-          ["Entiendo callbacks", "Escribo una función que recibe otra función y sé por qué.", 25],
-          ["Entiendo Promises", "Distingo pending, fulfilled y rejected sin memorizar una definición.", 35],
-          ["Uso async/await con errores", "Hago una operación async con try/catch.", 35]
-        ]
-      },
-      {
-        level: 8,
-        title: "DOM y eventos",
-        subtitle: "Hacer que JavaScript controle una página real.",
-        victories: [
-          ["Selecciono elementos del DOM", "Uso querySelector/querySelectorAll y explico qué obtengo.", 15],
-          ["Leo y cambio contenido", "Modifico texto, atributos y clases desde JS.", 20],
-          ["Creo elementos desde JavaScript", "Genero una pequeña lista a partir de un array.", 30],
-          ["Entiendo eventos", "Conecto un click a una función sin usar HTML inline.", 20],
-          ["Entiendo event y target", "Identifico qué elemento produjo un evento.", 25],
-          ["Entiendo bubbling y delegación", "Manejo una lista dinámica con un solo listener.", 40],
-          ["Construyo un mini proyecto DOM solo", "Ejemplo: lista de tareas, contador o filtro interactivo.", 60]
-        ]
-      },
-      {
-        level: 9,
-        title: "Datos externos y APIs",
-        subtitle: "Tu programa empieza a hablar con el mundo.",
-        victories: [
-          ["Entiendo JSON", "Convierto entre objeto JS y JSON y explico por qué no son exactamente lo mismo.", 20],
-          ["Entiendo HTTP a nivel práctico", "Sé qué significan request, response, método y status code.", 30],
-          ["Hago un GET con fetch", "Obtengo datos públicos y los veo en consola.", 25],
-          ["Renderizo datos de una API", "Muestro resultados reales en el DOM.", 40],
-          ["Manejo loading y errores", "La interfaz no queda muda si la petición falla.", 35],
-          ["Entiendo CRUD", "Relaciono Create/Read/Update/Delete con POST/GET/PUT-PATCH/DELETE.", 35],
-          ["Construyo un mini cliente de API", "Buscar, mostrar y manejar errores sin copiar un proyecto completo.", 70]
-        ]
-      },
-      {
-        level: 10,
-        title: "Aplicaciones y autonomía",
-        subtitle: "De estudiante de sintaxis a constructor.",
-        victories: [
-          ["Organizo un proyecto en módulos", "Puedo decidir qué responsabilidades separar.", 30],
-          ["Entiendo estado de una interfaz", "Identifico qué datos determinan lo que el usuario ve.", 35],
-          ["Puedo renderizar desde estado", "Cambio datos y actualizo la UI de forma predecible.", 40],
-          ["Entiendo el concepto de SPA", "Explico qué cambia frente a navegar entre páginas tradicionales.", 30],
-          ["Sé depurar con DevTools", "Uso breakpoints, consola y Network para encontrar un problema real.", 45],
-          ["Leo documentación para aprender algo nuevo", "Implemento una API o método que nunca me enseñaron directamente.", 60],
-          ["Construyo una aplicación útil para mí", "Planifico, implemento, depuro y puedo explicar las decisiones principales.", 100],
-          ["Puedo leer código generado por IA críticamente", "No acepto código por fe: puedo explicarlo, modificarlo y detectar riesgos o errores.", 80]
-        ]
-      }
+        {
+            "level": 0,
+            "title": "Introducción a JavaScript",
+            "subtitle": "Primero construimos el modelo mental.",
+            "lessons": [
+                "Recursos del curso",
+                "Introducción al curso",
+                "Características y Gramática de JavaScript",
+                "Artículo: Introducción a JavaScript",
+                "Artículo: ¿Qué es ECMAScript?"
+            ],
+            "victories": [
+                {
+                    "id": "L0-V0",
+                    "name": "Puedo explicar qué es una instrucción",
+                    "lesson": "Características y Gramática de JavaScript",
+                    "test": "Explícalo sin usar «código» como definición.",
+                    "xp": 10
+                },
+                {
+                    "id": "L0-V1",
+                    "name": "Entiendo expresión vs. resultado",
+                    "lesson": "Características y Gramática de JavaScript",
+                    "test": "Predice qué produce 2 + 2 * 3 antes de ejecutarlo.",
+                    "xp": 10
+                },
+                {
+                    "id": "L0-V4",
+                    "name": "Puedo leer código línea por línea",
+                    "lesson": "Artículo: Introducción a JavaScript",
+                    "test": "Toma 5 líneas sencillas y narra qué cambia después de cada una.",
+                    "xp": 20
+                }
+            ]
+        },
+        {
+            "level": 1,
+            "title": "Tipos de Datos",
+            "subtitle": "Variables, valores, funciones, arrays y objetos.",
+            "lessons": [
+                "Variables: var VS let",
+                "Constantes ( const )",
+                "Cadenas de Texto ( Strings )",
+                "Plantillas de cadenas de texto ( Template Strings )",
+                "Números ( Numbers )",
+                "Booleans",
+                "undefined, null & NaN",
+                "Funciones",
+                "Arreglos ( Arrays )",
+                "Objetos"
+            ],
+            "victories": [
+                {
+                    "id": "L1-V0",
+                    "name": "Distingo var, let y const",
+                    "lesson": "Variables: var VS let + Constantes ( const )",
+                    "test": "Dime cuál usarías en tres casos distintos y por qué.",
+                    "xp": 15
+                },
+                {
+                    "id": "L0-V2",
+                    "name": "Entiendo qué significa asignar",
+                    "lesson": "Variables: var VS let",
+                    "test": "Explica por qué x = x + 1 funciona en programación aunque no en álgebra.",
+                    "xp": 15
+                },
+                {
+                    "id": "L1-V1",
+                    "name": "Domino strings",
+                    "lesson": "Cadenas de Texto ( Strings )",
+                    "test": "Crea, concatena y transforma texto sin copiar ejemplos.",
+                    "xp": 15
+                },
+                {
+                    "id": "L1-V2",
+                    "name": "Domino template strings",
+                    "lesson": "Plantillas de cadenas de texto ( Template Strings )",
+                    "test": "Construye una frase con ${...} usando al menos 3 valores.",
+                    "xp": 10
+                },
+                {
+                    "id": "L1-V3",
+                    "name": "Domino numbers y operadores básicos",
+                    "lesson": "Números ( Numbers )",
+                    "test": "Resuelve precio × cantidad, descuento y total.",
+                    "xp": 15
+                },
+                {
+                    "id": "L1-V4",
+                    "name": "Entiendo booleans",
+                    "lesson": "Booleans",
+                    "test": "Convierte condiciones reales en true/false.",
+                    "xp": 10
+                },
+                {
+                    "id": "L1-V5",
+                    "name": "Distingo undefined, null y NaN",
+                    "lesson": "undefined, null & NaN",
+                    "test": "Crea un ejemplo intencional de cada uno.",
+                    "xp": 20
+                },
+                {
+                    "id": "L1-V6",
+                    "name": "Sé inspeccionar tipos",
+                    "lesson": "Tipos de Datos",
+                    "test": "Usa typeof y explica al menos una rareza.",
+                    "xp": 10
+                },
+                {
+                    "id": "L2-V0",
+                    "name": "Entiendo por qué existen las funciones",
+                    "lesson": "Funciones",
+                    "test": "Identifica repetición y conviértela en una función.",
+                    "xp": 15
+                },
+                {
+                    "id": "L2-V1",
+                    "name": "Distingo parámetro y argumento",
+                    "lesson": "Funciones",
+                    "test": "Explícalo con un ejemplo propio.",
+                    "xp": 10
+                },
+                {
+                    "id": "L2-V2",
+                    "name": "Entiendo return",
+                    "lesson": "Funciones",
+                    "test": "Predice qué ocurre antes y después de un return.",
+                    "xp": 20
+                },
+                {
+                    "id": "L2-V3",
+                    "name": "Entiendo scope básico",
+                    "lesson": "Funciones",
+                    "test": "Predice qué variables pueden leerse dentro y fuera.",
+                    "xp": 20
+                },
+                {
+                    "id": "L2-V4",
+                    "name": "Creo funciones reutilizables",
+                    "lesson": "Funciones",
+                    "test": "Haz una función que calcule un total sin valores fijos.",
+                    "xp": 20
+                },
+                {
+                    "id": "L2-V5",
+                    "name": "Puedo depurar una función",
+                    "lesson": "Funciones",
+                    "test": "Encuentra y arregla una función que devuelve un resultado incorrecto.",
+                    "xp": 25
+                },
+                {
+                    "id": "L3-V0",
+                    "name": "Sé cuándo usar un array",
+                    "lesson": "Arreglos ( Arrays )",
+                    "test": "Representa una lista real con un array.",
+                    "xp": 15
+                },
+                {
+                    "id": "L3-V1",
+                    "name": "Puedo leer y modificar arrays",
+                    "lesson": "Arreglos ( Arrays )",
+                    "test": "Accede, agrega y retira elementos conscientemente.",
+                    "xp": 15
+                },
+                {
+                    "id": "L3-V2",
+                    "name": "Sé cuándo usar un objeto",
+                    "lesson": "Objetos",
+                    "test": "Modela una entidad real con varias propiedades.",
+                    "xp": 15
+                },
+                {
+                    "id": "L3-V3",
+                    "name": "Accedo y modifico propiedades",
+                    "lesson": "Objetos",
+                    "test": "Usa punto y corchetes y explica cuándo conviene cada uno.",
+                    "xp": 15
+                },
+                {
+                    "id": "L3-V4",
+                    "name": "Entiendo valores vs. referencias",
+                    "lesson": "Objetos",
+                    "test": "Predice por qué una mutación puede afectar al objeto original.",
+                    "xp": 30
+                },
+                {
+                    "id": "L3-V5",
+                    "name": "Puedo modelar datos combinados",
+                    "lesson": "Objetos + Arreglos ( Arrays )",
+                    "test": "Crea un array de 3 objetos con al menos 4 propiedades.",
+                    "xp": 25
+                }
+            ]
+        },
+        {
+            "level": 2,
+            "title": "Estructuras de Control",
+            "subtitle": "Decisiones, loops y sintaxis moderna.",
+            "lessons": [
+                "Tipos de Operadores",
+                "Condicionales",
+                "Ciclos ( Loops )",
+                "Manejo de Errores",
+                "break & continue",
+                "Destructuración",
+                "Objetos Literales",
+                "Parámetros REST & Operador Spread",
+                "Arrow Functions"
+            ],
+            "victories": [
+                {
+                    "id": "L4-V0",
+                    "name": "Entiendo operadores de comparación y lógicos",
+                    "lesson": "Tipos de Operadores",
+                    "test": "Predice resultados con ===, >, &&, || y !.",
+                    "xp": 20
+                },
+                {
+                    "id": "L4-V1",
+                    "name": "Construyo if / else con intención",
+                    "lesson": "Condicionales",
+                    "test": "Resuelve una decisión de tres caminos.",
+                    "xp": 20
+                },
+                {
+                    "id": "L4-V2",
+                    "name": "Entiendo truthy y falsy",
+                    "lesson": "Condicionales",
+                    "test": "Predice al menos seis valores antes de verificarlos.",
+                    "xp": 20
+                },
+                {
+                    "id": "L4-V3",
+                    "name": "Sé elegir un loop",
+                    "lesson": "Ciclos ( Loops )",
+                    "test": "Explica cuándo usarías for, while o for...of.",
+                    "xp": 20
+                },
+                {
+                    "id": "L4-V4",
+                    "name": "Puedo seguir un loop en papel",
+                    "lesson": "Ciclos ( Loops )",
+                    "test": "Anota el valor de las variables en cada iteración.",
+                    "xp": 25
+                },
+                {
+                    "id": "ctrl-errors",
+                    "name": "Manejo errores conscientemente",
+                    "lesson": "Manejo de Errores",
+                    "test": "Provoca un error y manéjalo con try/catch explicando qué ocurrió.",
+                    "xp": 25
+                },
+                {
+                    "id": "L4-V5",
+                    "name": "Uso break y continue conscientemente",
+                    "lesson": "break & continue",
+                    "test": "Crea un caso útil para cada uno.",
+                    "xp": 15
+                },
+                {
+                    "id": "L6-V0",
+                    "name": "Entiendo destructuring",
+                    "lesson": "Destructuración",
+                    "test": "Extrae valores de arrays y objetos sin perderte.",
+                    "xp": 15
+                },
+                {
+                    "id": "ctrl-object-literals",
+                    "name": "Entiendo objetos literales modernos",
+                    "lesson": "Objetos Literales",
+                    "test": "Usa propiedades abreviadas y métodos en un objeto propio.",
+                    "xp": 20
+                },
+                {
+                    "id": "L6-V1",
+                    "name": "Entiendo rest y spread",
+                    "lesson": "Parámetros REST & Operador Spread",
+                    "test": "Explica por qué ... cambia de significado según el contexto.",
+                    "xp": 25
+                },
+                {
+                    "id": "L6-V2",
+                    "name": "Uso arrow functions sin confundirlas",
+                    "lesson": "Arrow Functions",
+                    "test": "Convierte una función normal y explica qué cambió.",
+                    "xp": 20
+                },
+                {
+                    "id": "L4-V6",
+                    "name": "Combino condición + loop",
+                    "lesson": "Condicionales + Ciclos ( Loops )",
+                    "test": "Filtra manualmente números pares mayores que 10.",
+                    "xp": 35
+                }
+            ]
+        },
+        {
+            "level": 3,
+            "title": "Programación Orientada a Objetos",
+            "subtitle": "Prototipos, herencia y clases.",
+            "lessons": [
+                "Prototipos",
+                "Herencia Prototípica",
+                "Clases y Herencia",
+                "Métodos estáticos, getters y setters"
+            ],
+            "victories": [
+                {
+                    "id": "L6-V4",
+                    "name": "Comprendo prototipos a nivel básico",
+                    "lesson": "Prototipos",
+                    "test": "Explica de dónde busca JS un método que no está directamente en un objeto.",
+                    "xp": 35
+                },
+                {
+                    "id": "oop-inheritance",
+                    "name": "Entiendo herencia prototípica",
+                    "lesson": "Herencia Prototípica",
+                    "test": "Crea dos objetos relacionados y explica la cadena de prototipos.",
+                    "xp": 35
+                },
+                {
+                    "id": "L6-V5",
+                    "name": "Entiendo clases como abstracción",
+                    "lesson": "Clases y Herencia",
+                    "test": "Crea una clase y explica qué sintaxis está escondiendo.",
+                    "xp": 30
+                },
+                {
+                    "id": "oop-static-getset",
+                    "name": "Uso métodos estáticos, getters y setters",
+                    "lesson": "Métodos estáticos, getters y setters",
+                    "test": "Construye un ejemplo donde cada uno tenga sentido.",
+                    "xp": 35
+                }
+            ]
+        },
+        {
+            "level": 4,
+            "title": "Objetos y Funciones del Lenguaje",
+            "subtitle": "Herramientas incorporadas que vas a usar todo el tiempo.",
+            "lessons": [
+                "Objeto console",
+                "Objeto Date",
+                "Objeto Math",
+                "Operador de Cortocircuito",
+                "alert, confirm y prompt",
+                "Expresiones Regulares",
+                "Funciones Anónimas Autoejecutables",
+                "Módulos ( import / export )"
+            ],
+            "victories": [
+                {
+                    "id": "L0-V3",
+                    "name": "Sé usar console para observar un programa",
+                    "lesson": "Objeto console",
+                    "test": "Usa console.log, warn y error para inspeccionar un programa.",
+                    "xp": 10
+                },
+                {
+                    "id": "lang-date",
+                    "name": "Uso Date para trabajar con fechas",
+                    "lesson": "Objeto Date",
+                    "test": "Obtén una fecha y extrae al menos tres partes de ella.",
+                    "xp": 15
+                },
+                {
+                    "id": "lang-math",
+                    "name": "Uso Math con intención",
+                    "lesson": "Objeto Math",
+                    "test": "Resuelve un problema pequeño usando Math sin copiar.",
+                    "xp": 15
+                },
+                {
+                    "id": "lang-short",
+                    "name": "Entiendo cortocircuito",
+                    "lesson": "Operador de Cortocircuito",
+                    "test": "Predice expresiones con && y || antes de ejecutarlas.",
+                    "xp": 20
+                },
+                {
+                    "id": "lang-dialogs",
+                    "name": "Entiendo alert, confirm y prompt",
+                    "lesson": "alert, confirm y prompt",
+                    "test": "Explica qué devuelve cada uno y cuándo no usarías estas APIs.",
+                    "xp": 10
+                },
+                {
+                    "id": "lang-regex",
+                    "name": "Reconozco para qué sirven las expresiones regulares",
+                    "lesson": "Expresiones Regulares",
+                    "test": "Valida o busca un patrón sencillo y explica la expresión.",
+                    "xp": 25
+                },
+                {
+                    "id": "lang-iife",
+                    "name": "Entiendo una IIFE",
+                    "lesson": "Funciones Anónimas Autoejecutables",
+                    "test": "Explica cuándo se ejecuta y qué problema histórico ayudaba a resolver.",
+                    "xp": 20
+                },
+                {
+                    "id": "L6-V3",
+                    "name": "Entiendo módulos import/export",
+                    "lesson": "Módulos ( import / export )",
+                    "test": "Separa una utilidad en otro archivo y reutilízala.",
+                    "xp": 25
+                }
+            ]
+        },
+        {
+            "level": 5,
+            "title": "Ejercicios de Lógica de Programación",
+            "subtitle": "Aquí dejamos de reconocer sintaxis y empezamos a resolver.",
+            "lessons": [
+                "Ejercicios de Lógica de Programación ( 1 / 10 )",
+                "Ejercicios de Lógica de Programación ( 2 / 10 )",
+                "Ejercicios de Lógica de Programación ( 3 / 10 )",
+                "Ejercicios de Lógica de Programación ( 4 / 10 )",
+                "Ejercicios de Lógica de Programación ( 5 / 10 )",
+                "Ejercicios de Lógica de Programación ( 6 / 10 )",
+                "Ejercicios de Lógica de Programación ( 7 / 10 )",
+                "Ejercicios de Lógica de Programación ( 8 / 10 )",
+                "Ejercicios de Lógica de Programación ( 9 / 10 )",
+                "Ejercicios de Lógica de Programación ( 10 / 10 )"
+            ],
+            "victories": [
+                {
+                    "id": "L5-V0",
+                    "name": "Divido un problema en pasos antes de programar",
+                    "lesson": "Ejercicios de Lógica ( 1–2 / 10 )",
+                    "test": "Escribe pseudocódigo antes de tocar JavaScript.",
+                    "xp": 25
+                },
+                {
+                    "id": "L5-V1",
+                    "name": "Resuelvo strings sin tutorial",
+                    "lesson": "Ejercicios de Lógica ( 3–4 / 10 )",
+                    "test": "Invierte, cuenta o transforma texto con tu propia estrategia.",
+                    "xp": 30
+                },
+                {
+                    "id": "L5-V2",
+                    "name": "Resuelvo arrays sin tutorial",
+                    "lesson": "Ejercicios de Lógica ( 5–6 / 10 )",
+                    "test": "Resuelve máximo/mínimo, duplicados o filtros razonando tú.",
+                    "xp": 30
+                },
+                {
+                    "id": "L5-V3",
+                    "name": "Detecto casos límite",
+                    "lesson": "Ejercicios de Lógica ( 7 / 10 )",
+                    "test": "Encuentra dos entradas que puedan romper tu solución.",
+                    "xp": 25
+                },
+                {
+                    "id": "L5-V4",
+                    "name": "Mejoro una solución que ya funciona",
+                    "lesson": "Ejercicios de Lógica ( 8–9 / 10 )",
+                    "test": "Hazla funcionar primero y luego simplifícala.",
+                    "xp": 30
+                },
+                {
+                    "id": "L5-V5",
+                    "name": "Completo un ejercicio difícil sin pedir la solución",
+                    "lesson": "Ejercicios de Lógica ( 10 / 10 )",
+                    "test": "Puedes pedir pistas, pero la implementación final debe ser tuya.",
+                    "xp": 50
+                }
+            ]
+        },
+        {
+            "level": 6,
+            "title": "Programación Asíncrona",
+            "subtitle": "JavaScript cuando las cosas no ocurren inmediatamente.",
+            "lessons": [
+                "Temporizadores ( setTimeout & setInterval )",
+                "Artículo: JavaScript Asíncrono",
+                "Asincronía y el Event Loop",
+                "Callbacks",
+                "Promesas",
+                "Funciones Asíncronas ( Async / Await )"
+            ],
+            "victories": [
+                {
+                    "id": "L7-V0",
+                    "name": "Entiendo código síncrono vs. asíncrono",
+                    "lesson": "Artículo: JavaScript Asíncrono",
+                    "test": "Da un ejemplo cotidiano y uno en código.",
+                    "xp": 20
+                },
+                {
+                    "id": "L7-V1",
+                    "name": "Entiendo setTimeout y setInterval",
+                    "lesson": "Temporizadores ( setTimeout & setInterval )",
+                    "test": "Predice el orden de varios console.log con temporizadores.",
+                    "xp": 20
+                },
+                {
+                    "id": "L7-V2",
+                    "name": "Tengo un modelo básico del event loop",
+                    "lesson": "Asincronía y el Event Loop",
+                    "test": "Explica call stack, cola y cuándo entra un callback.",
+                    "xp": 40
+                },
+                {
+                    "id": "L7-V3",
+                    "name": "Entiendo callbacks",
+                    "lesson": "Callbacks",
+                    "test": "Escribe una función que recibe otra función y explica por qué.",
+                    "xp": 25
+                },
+                {
+                    "id": "L7-V4",
+                    "name": "Entiendo Promises",
+                    "lesson": "Promesas",
+                    "test": "Distingue pending, fulfilled y rejected usando un ejemplo.",
+                    "xp": 35
+                },
+                {
+                    "id": "L7-V5",
+                    "name": "Uso async/await con errores",
+                    "lesson": "Funciones Asíncronas ( Async / Await )",
+                    "test": "Haz una operación async y manéjala con try/catch.",
+                    "xp": 35
+                }
+            ]
+        },
+        {
+            "level": 7,
+            "title": "Nuevos Tipos y Características",
+            "subtitle": "Partes modernas del lenguaje que amplían tu caja de herramientas.",
+            "lessons": [
+                "Symbols",
+                "Sets",
+                "Maps",
+                "WeakSets & WeakMaps",
+                "Iterables & Iterators",
+                "Generators",
+                "Proxies",
+                "Propiedades Dinámicas de los Objetos"
+            ],
+            "victories": [
+                {
+                    "id": "modern-symbol",
+                    "name": "Entiendo para qué sirve Symbol",
+                    "lesson": "Symbols",
+                    "test": "Crea una propiedad con Symbol y explica qué la hace diferente.",
+                    "xp": 20
+                },
+                {
+                    "id": "modern-set",
+                    "name": "Uso Set para valores únicos",
+                    "lesson": "Sets",
+                    "test": "Elimina duplicados de una colección con Set.",
+                    "xp": 20
+                },
+                {
+                    "id": "modern-map",
+                    "name": "Distingo Map de Object",
+                    "lesson": "Maps",
+                    "test": "Elige entre Map y Object para dos casos y justifica.",
+                    "xp": 25
+                },
+                {
+                    "id": "modern-weak",
+                    "name": "Sé qué problema resuelven WeakSet y WeakMap",
+                    "lesson": "WeakSets & WeakMaps",
+                    "test": "Explícalo sin memorizar la definición.",
+                    "xp": 25
+                },
+                {
+                    "id": "modern-iterator",
+                    "name": "Entiendo iterable e iterator",
+                    "lesson": "Iterables & Iterators",
+                    "test": "Explica qué hace posible un for...of.",
+                    "xp": 30
+                },
+                {
+                    "id": "modern-generator",
+                    "name": "Entiendo generators a nivel básico",
+                    "lesson": "Generators",
+                    "test": "Crea un generator sencillo y recórrelo.",
+                    "xp": 30
+                },
+                {
+                    "id": "modern-proxy",
+                    "name": "Entiendo qué intercepta un Proxy",
+                    "lesson": "Proxies",
+                    "test": "Intercepta una lectura o escritura y explica el efecto.",
+                    "xp": 35
+                },
+                {
+                    "id": "modern-dynamic",
+                    "name": "Creo propiedades dinámicas",
+                    "lesson": "Propiedades Dinámicas de los Objetos",
+                    "test": "Construye una clave a partir de otro valor.",
+                    "xp": 20
+                }
+            ]
+        },
+        {
+            "level": 8,
+            "title": "this en JavaScript",
+            "subtitle": "Contexto de ejecución sin magia.",
+            "lessons": [
+                "this",
+                "call, apply & bind"
+            ],
+            "victories": [
+                {
+                    "id": "L6-V6",
+                    "name": "Entiendo this en casos básicos",
+                    "lesson": "this",
+                    "test": "Predice a qué objeto apunta this en varios contextos.",
+                    "xp": 40
+                },
+                {
+                    "id": "this-bind",
+                    "name": "Entiendo call, apply y bind",
+                    "lesson": "call, apply & bind",
+                    "test": "Usa los tres sobre una misma función y explica la diferencia.",
+                    "xp": 35
+                }
+            ]
+        },
+        {
+            "level": 9,
+            "title": "JSON",
+            "subtitle": "El formato que vas a ver en casi todas las APIs.",
+            "lessons": [
+                "Artículo: JSON",
+                "JSON"
+            ],
+            "victories": [
+                {
+                    "id": "L9-V0",
+                    "name": "Entiendo JSON",
+                    "lesson": "Artículo: JSON + JSON",
+                    "test": "Convierte entre objeto JS y JSON y explica por qué no son lo mismo.",
+                    "xp": 20
+                }
+            ]
+        },
+        {
+            "level": 10,
+            "title": "DOM: Document Object Model",
+            "subtitle": "Hacer que JavaScript controle una página real.",
+            "lessons": [
+                "WEB APIs",
+                "Introducción al DOM",
+                "Nodos, Elementos y Selectores",
+                "Atributos y Data-Attributes",
+                "Estilos y Variables CSS",
+                "Clases CSS",
+                "Texto y HTML",
+                "DOM Traversing: Recorriendo el DOM",
+                "Creando Elementos y Fragmentos",
+                "Templates HTML",
+                "Modificando Elementos ( Old Style )",
+                "Modificando Elementos ( Cool Style )",
+                "Manejadores de Eventos",
+                "Eventos con Parámetros y Remover Eventos",
+                "Flujo de Eventos ( Burbuja y Captura )",
+                "stopPropagation & preventDefault",
+                "Delegación de Eventos",
+                "BOM: Propiedades y Eventos",
+                "BOM: Métodos",
+                "BOM: Objetos: URL, Historial y Navegador"
+            ],
+            "victories": [
+                {
+                    "id": "L8-V0",
+                    "name": "Selecciono elementos del DOM",
+                    "lesson": "Nodos, Elementos y Selectores",
+                    "test": "Usa querySelector/querySelectorAll y explica qué recibes.",
+                    "xp": 15
+                },
+                {
+                    "id": "L8-V1",
+                    "name": "Leo y cambio contenido, atributos y clases",
+                    "lesson": "Atributos / Clases CSS / Texto y HTML",
+                    "test": "Modifica texto, atributos y clases desde JS.",
+                    "xp": 20
+                },
+                {
+                    "id": "dom-traverse",
+                    "name": "Puedo recorrer relaciones del DOM",
+                    "lesson": "DOM Traversing: Recorriendo el DOM",
+                    "test": "Sube, baja y navega entre nodos conscientemente.",
+                    "xp": 25
+                },
+                {
+                    "id": "L8-V2",
+                    "name": "Creo elementos desde JavaScript",
+                    "lesson": "Creando Elementos y Fragmentos + Templates HTML",
+                    "test": "Genera una lista desde un array.",
+                    "xp": 30
+                },
+                {
+                    "id": "L8-V3",
+                    "name": "Entiendo eventos",
+                    "lesson": "Manejadores de Eventos",
+                    "test": "Conecta un click a una función sin HTML inline.",
+                    "xp": 20
+                },
+                {
+                    "id": "L8-V4",
+                    "name": "Entiendo event y target",
+                    "lesson": "Eventos con Parámetros y Remover Eventos",
+                    "test": "Identifica qué elemento produjo un evento.",
+                    "xp": 25
+                },
+                {
+                    "id": "L8-V5",
+                    "name": "Entiendo bubbling y delegación",
+                    "lesson": "Flujo de Eventos + Delegación de Eventos",
+                    "test": "Maneja una lista dinámica con un solo listener.",
+                    "xp": 40
+                },
+                {
+                    "id": "dom-prevent",
+                    "name": "Sé cuándo detener o prevenir un evento",
+                    "lesson": "stopPropagation & preventDefault",
+                    "test": "Demuestra la diferencia con dos ejemplos.",
+                    "xp": 25
+                },
+                {
+                    "id": "dom-bom",
+                    "name": "Distingo DOM de BOM",
+                    "lesson": "BOM: Propiedades, Métodos y Objetos",
+                    "test": "Usa una API de window/location/history y explica dónde vive.",
+                    "xp": 25
+                },
+                {
+                    "id": "L8-V6",
+                    "name": "Construyo un mini proyecto DOM solo",
+                    "lesson": "Fin de la sección DOM",
+                    "test": "Haz una lista, contador o filtro interactivo sin copiar un proyecto entero.",
+                    "xp": 60
+                }
+            ]
+        },
+        {
+            "level": 11,
+            "title": "Ejercicios Prácticos del DOM",
+            "subtitle": "Convertimos conceptos en interfaces reales.",
+            "lessons": [
+                "Menú de Hamburguesa",
+                "Reloj Digital",
+                "Eventos del Teclado",
+                "Cuenta Regresiva",
+                "Tema Dark / Light con localStorage",
+                "Responsive con JavaScript",
+                "Filtros de Búsqueda",
+                "Responsive Slider",
+                "ScrollSpy",
+                "Validación de Formularios",
+                "Narrador ( Lector de Voz )"
+            ],
+            "victories": [
+                {
+                    "id": "dom-practice-1",
+                    "name": "Completo mi primer ejercicio práctico DOM",
+                    "lesson": "Menú de Hamburguesa o Reloj Digital",
+                    "test": "Termínalo y luego explica las tres decisiones más importantes.",
+                    "xp": 45
+                },
+                {
+                    "id": "dom-practice-storage",
+                    "name": "Persisto una preferencia en el navegador",
+                    "lesson": "Tema Dark / Light con localStorage",
+                    "test": "Cierra y abre la página y conserva el estado.",
+                    "xp": 45
+                },
+                {
+                    "id": "dom-practice-form",
+                    "name": "Valido interacción real del usuario",
+                    "lesson": "Validación de Formularios con JavaScript",
+                    "test": "Maneja al menos tres errores de entrada sin recargar.",
+                    "xp": 50
+                },
+                {
+                    "id": "dom-practice-independent",
+                    "name": "Construyo un ejercicio DOM sin seguir el video línea por línea",
+                    "lesson": "Cualquier ejercicio práctico posterior",
+                    "test": "Usa el video como referencia, no como dictado.",
+                    "xp": 70
+                }
+            ]
+        },
+        {
+            "level": 12,
+            "title": "AJAX",
+            "subtitle": "Pedir datos sin recargar la página.",
+            "lessons": [
+                "Artículo: AJAX",
+                "Introducción a AJAX",
+                "Objeto XMLHttpRequest",
+                "API Fetch",
+                "API Fetch + Async-Await",
+                "Librería Axios",
+                "Librería Axios + Async-Await"
+            ],
+            "victories": [
+                {
+                    "id": "ajax-concept",
+                    "name": "Entiendo qué problema resuelve AJAX",
+                    "lesson": "Introducción a AJAX",
+                    "test": "Explícalo sin decir solamente «hacer peticiones».",
+                    "xp": 20
+                },
+                {
+                    "id": "ajax-xhr",
+                    "name": "Reconozco XMLHttpRequest",
+                    "lesson": "Objeto XMLHttpRequest",
+                    "test": "Lee un ejemplo y narra su flujo aunque prefieras fetch.",
+                    "xp": 20
+                },
+                {
+                    "id": "L9-V2",
+                    "name": "Hago un GET con fetch",
+                    "lesson": "API Fetch",
+                    "test": "Obtén datos públicos y míralos en consola.",
+                    "xp": 25
+                },
+                {
+                    "id": "ajax-fetch-await",
+                    "name": "Combino fetch con async/await",
+                    "lesson": "API Fetch + Async-Await",
+                    "test": "Haz una petición y procesa respuesta/errores con async/await.",
+                    "xp": 35
+                },
+                {
+                    "id": "L9-V4",
+                    "name": "Manejo loading y errores",
+                    "lesson": "API Fetch + Async-Await",
+                    "test": "La interfaz informa carga y fallo.",
+                    "xp": 35
+                },
+                {
+                    "id": "ajax-axios",
+                    "name": "Entiendo qué aporta Axios",
+                    "lesson": "Librería Axios + Async-Await",
+                    "test": "Compara una petición en fetch y Axios.",
+                    "xp": 20
+                }
+            ]
+        },
+        {
+            "level": 13,
+            "title": "APIs REST",
+            "subtitle": "Entender contratos HTTP y CRUD.",
+            "lessons": [
+                "Artículo: API REST",
+                "Introducción a las API REST",
+                "JSON Server - API falsa local",
+                "Consumo de datos con cliente REST",
+                "API REST: CRUD",
+                "API REST: CRUD con AJAX",
+                "API REST: CRUD con Fetch",
+                "API REST: CRUD con Axios"
+            ],
+            "victories": [
+                {
+                    "id": "L9-V1",
+                    "name": "Entiendo HTTP a nivel práctico",
+                    "lesson": "Introducción a las API REST",
+                    "test": "Explica request, response, método y status code.",
+                    "xp": 30
+                },
+                {
+                    "id": "rest-json-server",
+                    "name": "Puedo trabajar contra una API de prueba",
+                    "lesson": "JSON Server - API falsa local",
+                    "test": "Levanta o comprende una API local y consulta un recurso.",
+                    "xp": 30
+                },
+                {
+                    "id": "L9-V5",
+                    "name": "Entiendo CRUD",
+                    "lesson": "API REST: CRUD",
+                    "test": "Relaciona Create/Read/Update/Delete con métodos HTTP.",
+                    "xp": 35
+                },
+                {
+                    "id": "rest-fetch-crud",
+                    "name": "Hago CRUD con Fetch",
+                    "lesson": "API REST: CRUD con Fetch ( 1 / 2 ) y ( 2 / 2 )",
+                    "test": "Crea, lee, actualiza y elimina al menos un recurso.",
+                    "xp": 60
+                },
+                {
+                    "id": "L9-V6",
+                    "name": "Construyo un mini cliente de API",
+                    "lesson": "Fin de APIs REST",
+                    "test": "Busca, muestra y maneja errores sin copiar un proyecto completo.",
+                    "xp": 70
+                }
+            ]
+        },
+        {
+            "level": 14,
+            "title": "Ejercicios Prácticos de AJAX y APIs",
+            "subtitle": "Usar APIs para construir cosas visibles.",
+            "lessons": [
+                "Sitio web con AJAX",
+                "Uploader con AJAX",
+                "Envío de Formulario con Fetch",
+                "Blog con Markdown",
+                "Paginación de Pokémons con Fetch",
+                "Buscador de TV Shows con Fetch",
+                "Buscador de Canciones con Fetch + Async-Await",
+                "Selects Anidados con Fetch",
+                "WordPress REST API y Fetch"
+            ],
+            "victories": [
+                {
+                    "id": "api-practice-1",
+                    "name": "Completo un proyecto pequeño consumiendo una API",
+                    "lesson": "Sitio web con AJAX o Paginación de Pokémons",
+                    "test": "Puedo explicar el flujo request → data → render.",
+                    "xp": 60
+                },
+                {
+                    "id": "api-practice-search",
+                    "name": "Construyo búsqueda con datos externos",
+                    "lesson": "Buscador de TV Shows o Canciones",
+                    "test": "Incluye loading, error y estado vacío.",
+                    "xp": 70
+                },
+                {
+                    "id": "api-practice-independent",
+                    "name": "Adapto un ejercicio a una API distinta",
+                    "lesson": "Cualquier ejercicio práctico de AJAX/APIs",
+                    "test": "Cambia la fuente de datos y corrige lo necesario por tu cuenta.",
+                    "xp": 90
+                }
+            ]
+        },
+        {
+            "level": 15,
+            "title": "Single Page Applications (SPA)",
+            "subtitle": "Organizar una aplicación como sistema.",
+            "lessons": [
+                "Introducción a las Single Page Applications",
+                "Estructura de Proyecto: assets, helpers y components",
+                "Helper de conexión a API REST",
+                "Helper de peticiones AJAX",
+                "Primeros Componentes de UI",
+                "Componente Header",
+                "Renderizado Dinámico",
+                "Enrutamiento: Router de la App",
+                "Enrutamiento Asíncrono",
+                "Vista del Post Actual",
+                "Buscador Interno de la App",
+                "Infinite Scroll & High Order Components",
+                "Styled Components & Single File Components"
+            ],
+            "victories": [
+                {
+                    "id": "L10-V3",
+                    "name": "Entiendo el concepto de SPA",
+                    "lesson": "Introducción a las Single Page Applications",
+                    "test": "Explica qué cambia frente a páginas tradicionales.",
+                    "xp": 30
+                },
+                {
+                    "id": "L10-V0",
+                    "name": "Organizo un proyecto por responsabilidades",
+                    "lesson": "Estructura de Proyecto: assets, helpers y components",
+                    "test": "Decide qué responsabilidades separar y por qué.",
+                    "xp": 30
+                },
+                {
+                    "id": "spa-components",
+                    "name": "Creo componentes de UI reutilizables",
+                    "lesson": "Primeros Componentes de UI + Componente Header",
+                    "test": "Reutiliza una función/componente sin duplicar HTML.",
+                    "xp": 45
+                },
+                {
+                    "id": "spa-render",
+                    "name": "Hago renderizado dinámico",
+                    "lesson": "Renderizado Dinámico",
+                    "test": "Cambia datos y actualiza una vista de forma predecible.",
+                    "xp": 45
+                },
+                {
+                    "id": "spa-router",
+                    "name": "Entiendo un router de SPA",
+                    "lesson": "Enrutamiento: Router de la App",
+                    "test": "Explica cómo cambia la vista sin recargar el documento completo.",
+                    "xp": 50
+                }
+            ]
+        },
+        {
+            "level": 16,
+            "title": "Reactividad",
+            "subtitle": "La interfaz como función del estado.",
+            "lessons": [
+                "Artículo: Reactividad en JavaScript",
+                "Introducción",
+                "Manipulación NO Reactiva del DOM",
+                "Interfaz de Usuario (UI) basada en el Estado",
+                "Estado Reactivo",
+                "Estado Inmutable",
+                "Componentes con Estado",
+                "Creando Librería de Componentes"
+            ],
+            "victories": [
+                {
+                    "id": "L10-V1",
+                    "name": "Entiendo estado de una interfaz",
+                    "lesson": "Interfaz de Usuario (UI) basada en el Estado",
+                    "test": "Identifica qué datos determinan exactamente lo que se ve.",
+                    "xp": 35
+                },
+                {
+                    "id": "L10-V2",
+                    "name": "Puedo renderizar desde estado",
+                    "lesson": "Estado Reactivo",
+                    "test": "Cambia el estado y actualiza la UI de manera predecible.",
+                    "xp": 40
+                },
+                {
+                    "id": "reactive-immutable",
+                    "name": "Entiendo por qué importa la inmutabilidad",
+                    "lesson": "Estado Inmutable",
+                    "test": "Actualiza un estado sin modificar directamente el original.",
+                    "xp": 40
+                },
+                {
+                    "id": "reactive-component-state",
+                    "name": "Construyo un componente con estado",
+                    "lesson": "Componentes con Estado",
+                    "test": "El componente mantiene estado y vuelve a renderizarse.",
+                    "xp": 55
+                },
+                {
+                    "id": "L10-V4",
+                    "name": "Sé depurar una aplicación con DevTools",
+                    "lesson": "Durante SPA/Reactividad",
+                    "test": "Usa consola, breakpoints y Network en un problema real.",
+                    "xp": 45
+                },
+                {
+                    "id": "L10-V5",
+                    "name": "Aprendo una API nueva leyendo documentación",
+                    "lesson": "Meta-habilidad",
+                    "test": "Implementa algo que el curso no te haya enseñado directamente.",
+                    "xp": 60
+                },
+                {
+                    "id": "L10-V7",
+                    "name": "Leo código generado por IA críticamente",
+                    "lesson": "Meta-habilidad",
+                    "test": "Explícalo, modifícalo y detecta al menos un riesgo o supuesto.",
+                    "xp": 80
+                },
+                {
+                    "id": "L10-V6",
+                    "name": "Construyo una aplicación útil para mí",
+                    "lesson": "Proyecto final personal",
+                    "test": "Planifica, implementa, depura y explica las decisiones principales.",
+                    "xp": 100
+                }
+            ]
+        }
     ];
 
     const stateKey = "jsQuestProgressV2";
@@ -641,12 +1583,16 @@
 
     let state = JSON.parse(localStorage.getItem(stateKey) || "{}");
     let saveTimer = null;
+    let localDirty = false;
+    let lastCloudUpdatedAt = "";
 
     const modulesEl = document.getElementById("modules");
     const totalPercent = document.getElementById("totalPercent");
     const totalBar = document.getElementById("totalBar");
     const totalText = document.getElementById("totalText");
     const focusTitle = document.getElementById("focusTitle");
+    const focusPath = document.getElementById("focusPath");
+    const focusSecondary = document.getElementById("focusSecondary");
     const focusXp = document.getElementById("focusXp");
     const notes = document.getElementById("notes");
     const toast = document.getElementById("toast");
@@ -677,49 +1623,71 @@
 
     function scheduleCloudSave() {
       persistLocal();
+      localDirty = true;
       clearTimeout(saveTimer);
-      setSyncStatus("Guardando…", "Mantén esta pestaña abierta un instante.");
-      saveTimer = setTimeout(async () => {
-        try {
-          await cloud("save", { payload: { progress: state, notes: notes.value } });
-          setSyncStatus("Sincronizado ✓", "PC y teléfono comparten este mismo progreso.");
-        } catch {
-          setSyncStatus("Guardado local", "Sin conexión: pulsa Sincronizar cuando vuelvas a tener internet.");
-        }
-      }, 450);
+      setSyncStatus("Guardando…", "Guardado local primero; nube en un instante.");
+      saveTimer = setTimeout(() => pushCloud(false), 350);
     }
 
-    async function loadCloud(showToast = false) {
-      setSyncStatus("Sincronizando…");
+    async function pushCloud(showToast = false) {
+      try {
+        const result = await cloud("save", { payload: { progress: state, notes: notes.value } });
+        localDirty = false;
+        lastCloudUpdatedAt = result.updated_at || lastCloudUpdatedAt;
+        setSyncStatus("Sincronizado ✓", "Cambios compartidos automáticamente entre tus dispositivos.");
+        if (showToast) celebrate("☁️ Cambios guardados en todos tus dispositivos");
+        return true;
+      } catch {
+        setSyncStatus("Guardado local", "Sin conexión: la copia local sigue segura y se reintentará.");
+        return false;
+      }
+    }
+
+    async function pullCloud(showToast = false, initial = false) {
+      if (localDirty) {
+        const pushed = await pushCloud(false);
+        if (!pushed) return;
+      }
+
       try {
         const data = await cloud("load");
-        if (data.exists && data.payload) {
+        if (!data.exists) {
+          await pushCloud(false);
+          return;
+        }
+
+        const remoteStamp = data.updated_at || "";
+        const hasNewRemote = initial || (remoteStamp && remoteStamp !== lastCloudUpdatedAt);
+
+        if (hasNewRemote && data.payload) {
           state = data.payload.progress || {};
           notes.value = data.payload.notes || "";
+          lastCloudUpdatedAt = remoteStamp;
+          persistLocal();
+          render();
+          if (!initial) setSyncStatus("Actualizado desde otro dispositivo ✓", "Acabo de recibir cambios de tu teléfono/PC.");
         } else {
-          await cloud("save", { payload: { progress: state, notes: notes.value } });
+          setSyncStatus("Sincronizado ✓", "PC y teléfono están al día.");
         }
-        persistLocal();
-        render();
-        setSyncStatus("Sincronizado ✓", "PC y teléfono comparten este mismo progreso.");
+
         if (showToast) celebrate("☁️ Progreso sincronizado");
       } catch {
-        setSyncStatus("Modo local", "No pude conectar con la nube; tu progreso local sigue seguro.");
-        render();
+        setSyncStatus("Modo local", "No pude consultar la nube; tu progreso local sigue seguro.");
+        if (initial) render();
       }
     }
 
     notes.value = localStorage.getItem(notesKey) || "";
     notes.addEventListener("input", scheduleCloudSave);
 
-    function idFor(level, index) {
-      return `L${level}-V${index}`;
+    function idFor(module, victory, index) {
+      return victory.id || `L${module.level}-V${index}`;
     }
 
     function allVictories() {
       return curriculum.flatMap(module =>
         module.victories.map((victory, index) => ({
-          id: idFor(module.level, index),
+          id: idFor(module, victory, index),
           module,
           index,
           victory
@@ -731,7 +1699,7 @@
       modulesEl.innerHTML = "";
 
       curriculum.forEach(module => {
-        const completed = module.victories.filter((_, i) => state[idFor(module.level, i)]).length;
+        const completed = module.victories.filter((victory, i) => state[idFor(module, victory, i)]).length;
         const percent = Math.round((completed / module.victories.length) * 100);
 
         const section = document.createElement("section");
@@ -744,7 +1712,7 @@
           <div class="level">${module.level}</div>
           <div>
             <div class="module-title">${module.title}</div>
-            <div class="module-meta">${module.subtitle}</div>
+            <div class="module-meta">${module.subtitle} · ${module.lessons.length} lecciones del curso</div>
           </div>
           <div class="module-count">${completed}/${module.victories.length} · ${percent}%</div>
         `;
@@ -752,10 +1720,14 @@
 
         const body = document.createElement("div");
         body.className = "module-body";
+        const route = document.createElement("div");
+        route.className = "course-route";
+        route.innerHTML = `<strong>📘 Ruta exacta en AprendeJavaScript.org:</strong> ${module.lessons.join(" → ")}`;
+        body.appendChild(route);
 
         module.victories.forEach((victory, i) => {
-          const [name, test, xp] = victory;
-          const id = idFor(module.level, i);
+          const { name, test, xp, lesson } = victory;
+          const id = idFor(module, victory, i);
           const done = !!state[id];
 
           const row = document.createElement("label");
@@ -765,7 +1737,8 @@
             <input type="checkbox" ${done ? "checked" : ""} aria-label="${name}">
             <div>
               <div class="victory-name">${name}</div>
-              <div class="victory-test"><strong>Prueba:</strong> ${test}</div>
+              <div class="lesson-tag">📘 Curso principal: ${lesson}</div>
+              <div class="victory-test"><strong>Prueba de dominio:</strong> ${test}</div>
             </div>
             <div class="xp">+${xp} XP</div>
           `;
@@ -795,8 +1768,8 @@
     function updateSummary() {
       const items = allVictories();
       const doneItems = items.filter(item => state[item.id]);
-      const maxXp = items.reduce((sum, item) => sum + item.victory[2], 0);
-      const earnedXp = doneItems.reduce((sum, item) => sum + item.victory[2], 0);
+      const maxXp = items.reduce((sum, item) => sum + item.victory.xp, 0);
+      const earnedXp = doneItems.reduce((sum, item) => sum + item.victory.xp, 0);
       const percent = items.length ? Math.round(doneItems.length / items.length * 100) : 0;
 
       totalPercent.textContent = `${percent}%`;
@@ -805,10 +1778,14 @@
 
       const next = items.find(item => !state[item.id]);
       if (next) {
-        focusTitle.textContent = `Nivel ${next.module.level}: ${next.victory[0]}`;
-        focusXp.textContent = `+${next.victory[2]} XP`;
+        focusTitle.textContent = `Etapa ${next.module.level}: ${next.victory.name}`;
+        focusPath.textContent = `📘 AprendeJavaScript.org → ${next.module.title} → ${next.victory.lesson}`;
+        focusSecondary.textContent = `📙 Curso 2 → busca el tema equivalente a «${next.victory.name}». El curso principal manda el ritmo.`;
+        focusXp.textContent = `+${next.victory.xp} XP`;
       } else {
-        focusTitle.textContent = "🏆 Completaste todas las victorias. Ahora toca construir.";
+        focusTitle.textContent = "🏆 Completaste toda la ruta principal.";
+        focusPath.textContent = "AprendeJavaScript.org completado con pruebas de dominio.";
+        focusSecondary.textContent = "Tu segundo curso queda como refuerzo, no como brújula.";
         focusXp.textContent = "LEGEND";
       }
     }
@@ -900,10 +1877,19 @@
       } catch {}
     });
 
-    document.getElementById("syncNowBtn").addEventListener("click", () => loadCloud(true));
-    window.addEventListener("online", () => loadCloud(false));
+    document.getElementById("syncNowBtn").addEventListener("click", () => pullCloud(true, false));
+    window.addEventListener("online", () => pullCloud(false, false));
+    window.addEventListener("focus", () => pullCloud(false, false));
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) pullCloud(false, false);
+    });
     window.addEventListener("beforeunload", persistLocal);
-    loadCloud(false);
+
+    setInterval(() => {
+      if (!document.hidden) pullCloud(false, false);
+    }, 4000);
+
+    pullCloud(false, true);
   </script>
 </body>
 </html>
