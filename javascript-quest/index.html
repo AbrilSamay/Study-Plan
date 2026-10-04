@@ -658,8 +658,10 @@
       syncSub.textContent = detail;
     }
 
+    const CLOUD_ENDPOINT = "https://zqqferglcahpktcqgjrs.supabase.co/functions/v1/javascript-quest";
+
     async function cloud(action, payload = {}) {
-      const res = await fetch(location.href.split("#")[0], {
+      const res = await fetch(CLOUD_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action, token: syncToken, ...payload })
