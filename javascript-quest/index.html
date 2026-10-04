@@ -1577,11 +1577,16 @@
     const hashToken = location.hash.startsWith("#sync=")
       ? decodeURIComponent(location.hash.slice(6))
       : "";
-    let syncToken = hashToken || localStorage.getItem(tokenKey) || makeToken();
+    const previousToken = localStorage.getItem(tokenKey) || "";
+    const adoptingSharedProfile = Boolean(hashToken && hashToken !== previousToken);
+    const localStateBeforeAdopt = JSON.parse(localStorage.getItem(stateKey) || "{}");
+    const localNotesBeforeAdopt = localStorage.getItem(notesKey) || "";
+
+    let syncToken = hashToken || previousToken || makeToken();
     localStorage.setItem(tokenKey, syncToken);
     if (hashToken) history.replaceState(null, "", location.pathname);
 
-    let state = JSON.parse(localStorage.getItem(stateKey) || "{}");
+    let state = { ...localStateBeforeAdopt };
     let saveTimer = null;
     let localDirty = false;
     let lastCloudUpdatedAt = "";
@@ -1660,12 +1665,35 @@
         const hasNewRemote = initial || (remoteStamp && remoteStamp !== lastCloudUpdatedAt);
 
         if (hasNewRemote && data.payload) {
-          state = data.payload.progress || {};
-          notes.value = data.payload.notes || "";
-          lastCloudUpdatedAt = remoteStamp;
-          persistLocal();
-          render();
-          if (!initial) setSyncStatus("Actualizado desde otro dispositivo ✓", "Acabo de recibir cambios de tu teléfono/PC.");
+          const remoteProgress = data.payload.progress || {};
+          const remoteNotes = data.payload.notes || "";
+
+          if (initial && adoptingSharedProfile) {
+            const keys = new Set([...Object.keys(remoteProgress), ...Object.keys(localStateBeforeAdopt)]);
+            const merged = {};
+            for (const key of keys) {
+              merged[key] = Boolean(remoteProgress[key] || localStateBeforeAdopt[key]);
+            }
+            state = merged;
+
+            if (remoteNotes && localNotesBeforeAdopt && remoteNotes !== localNotesBeforeAdopt) {
+              notes.value = remoteNotes + "\n\n--- Notas importadas del otro dispositivo ---\n" + localNotesBeforeAdopt;
+            } else {
+              notes.value = remoteNotes || localNotesBeforeAdopt || "";
+            }
+
+            persistLocal();
+            localDirty = true;
+            await pushCloud(false);
+            setSyncStatus("Dispositivos vinculados ✓", "Fusioné el progreso existente y ahora ambos usan el mismo perfil.");
+          } else {
+            state = remoteProgress;
+            notes.value = remoteNotes;
+            lastCloudUpdatedAt = remoteStamp;
+            persistLocal();
+            render();
+            if (!initial) setSyncStatus("Actualizado desde otro dispositivo ✓", "Acabo de recibir cambios de tu teléfono/PC.");
+          }
         } else {
           setSyncStatus("Sincronizado ✓", "PC y teléfono están al día.");
         }
