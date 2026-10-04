@@ -349,13 +349,53 @@
       font-weight: 800;
     }
 
+    .sync-card {
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sync-info { min-width: 0; }
+    .sync-status { font-weight: 850; }
+    .sync-sub { color: var(--muted); font-size: .88rem; margin-top: 3px; }
+    .sync-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .sync-dot {
+      width: 9px; height: 9px; border-radius: 50%;
+      background: var(--good); display: inline-block; margin-right: 7px;
+      box-shadow: 0 0 14px rgba(134,239,172,.45);
+    }
+
     @media (max-width: 760px) {
-      .hero { grid-template-columns: 1fr; }
-      .focus-card { grid-template-columns: 1fr; }
-      .module-header { grid-template-columns: auto 1fr; }
-      .module-header .module-count { grid-column: 2; }
-      .victory { grid-template-columns: auto 1fr; }
+      .shell { width: min(100% - 18px, 680px); padding: 12px 0 90px; }
+      .hero { grid-template-columns: 1fr; gap: 10px; margin-bottom: 10px; }
+      .hero-main { padding: 20px 18px; }
+      h1 { font-size: clamp(2rem, 11vw, 3rem); }
+      .hero p { font-size: .94rem; }
+      .progress-card { padding: 18px; }
+      .big-progress { font-size: 2.45rem; }
+      .toolbar { position: sticky; top: 8px; z-index: 20; padding: 9px; margin-bottom: 10px; backdrop-filter: blur(16px); }
+      .toolbar-left, .toolbar-right { width: 100%; }
+      .toolbar .btn { flex: 1 1 auto; text-align: center; min-height: 44px; }
+      .toolbar-right { display: none; }
+      .sync-card { flex-direction: column; align-items: stretch; margin-bottom: 10px; }
+      .sync-actions .btn { flex: 1; min-height: 44px; }
+      .focus-card { grid-template-columns: 1fr auto; padding: 15px; margin-bottom: 10px; }
+      .focus-title { font-size: 1rem; }
+      .module { margin: 9px 0; border-radius: 16px; }
+      .module-header { grid-template-columns: auto 1fr; padding: 14px; gap: 10px; }
+      .module-header .module-count { grid-column: 2; font-size: .82rem; }
+      .level { width: 38px; height: 38px; border-radius: 11px; }
+      .module-body { padding: 5px 10px 12px; }
+      .victory { grid-template-columns: auto 1fr; padding: 14px 4px; gap: 10px; }
+      .victory input[type="checkbox"] { width: 26px; height: 26px; }
+      .victory-name { font-size: .98rem; }
+      .victory-test { font-size: .86rem; }
       .xp { grid-column: 2; justify-self: start; }
+      .notes { padding: 16px; }
+      .notes textarea { min-height: 150px; font-size: 16px; }
+      .philosophy { margin-bottom: env(safe-area-inset-bottom); }
     }
   </style>
 </head>
@@ -390,6 +430,17 @@
         <label class="btn" for="importInput">Importar progreso</label>
         <input id="importInput" type="file" accept=".json" hidden>
         <button class="btn danger" id="resetBtn">Reiniciar</button>
+      </div>
+    </section>
+
+    <section class="card sync-card">
+      <div class="sync-info">
+        <div class="sync-status"><span class="sync-dot"></span><span id="syncStatus">Sincronizando…</span></div>
+        <div class="sync-sub" id="syncSub">Tu progreso se guarda en la nube.</div>
+      </div>
+      <div class="sync-actions">
+        <button class="btn" id="shareBtn">📱 Vincular otro dispositivo</button>
+        <button class="btn" id="syncNowBtn">↻ Sincronizar</button>
       </div>
     </section>
 
@@ -571,9 +622,25 @@
       }
     ];
 
-    const stateKey = "jsQuestProgressV1";
-    const notesKey = "jsQuestNotesV1";
+    const stateKey = "jsQuestProgressV2";
+    const notesKey = "jsQuestNotesV2";
+    const tokenKey = "jsQuestSyncTokenV1";
+
+    function makeToken() {
+      const bytes = crypto.getRandomValues(new Uint8Array(32));
+      return btoa(String.fromCharCode(...bytes))
+        .replaceAll("+", "-").replaceAll("/", "_").replaceAll("=", "");
+    }
+
+    const hashToken = location.hash.startsWith("#sync=")
+      ? decodeURIComponent(location.hash.slice(6))
+      : "";
+    let syncToken = hashToken || localStorage.getItem(tokenKey) || makeToken();
+    localStorage.setItem(tokenKey, syncToken);
+    if (hashToken) history.replaceState(null, "", location.pathname);
+
     let state = JSON.parse(localStorage.getItem(stateKey) || "{}");
+    let saveTimer = null;
 
     const modulesEl = document.getElementById("modules");
     const totalPercent = document.getElementById("totalPercent");
@@ -583,9 +650,65 @@
     const focusXp = document.getElementById("focusXp");
     const notes = document.getElementById("notes");
     const toast = document.getElementById("toast");
+    const syncStatus = document.getElementById("syncStatus");
+    const syncSub = document.getElementById("syncSub");
+
+    function setSyncStatus(label, detail = "Tu progreso se guarda en la nube.") {
+      syncStatus.textContent = label;
+      syncSub.textContent = detail;
+    }
+
+    async function cloud(action, payload = {}) {
+      const res = await fetch(location.href.split("#")[0], {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action, token: syncToken, ...payload })
+      });
+      if (!res.ok) throw new Error(await res.text());
+      return res.json();
+    }
+
+    function persistLocal() {
+      localStorage.setItem(stateKey, JSON.stringify(state));
+      localStorage.setItem(notesKey, notes.value);
+    }
+
+    function scheduleCloudSave() {
+      persistLocal();
+      clearTimeout(saveTimer);
+      setSyncStatus("Guardando…", "Mantén esta pestaña abierta un instante.");
+      saveTimer = setTimeout(async () => {
+        try {
+          await cloud("save", { payload: { progress: state, notes: notes.value } });
+          setSyncStatus("Sincronizado ✓", "PC y teléfono comparten este mismo progreso.");
+        } catch {
+          setSyncStatus("Guardado local", "Sin conexión: pulsa Sincronizar cuando vuelvas a tener internet.");
+        }
+      }, 450);
+    }
+
+    async function loadCloud(showToast = false) {
+      setSyncStatus("Sincronizando…");
+      try {
+        const data = await cloud("load");
+        if (data.exists && data.payload) {
+          state = data.payload.progress || {};
+          notes.value = data.payload.notes || "";
+        } else {
+          await cloud("save", { payload: { progress: state, notes: notes.value } });
+        }
+        persistLocal();
+        render();
+        setSyncStatus("Sincronizado ✓", "PC y teléfono comparten este mismo progreso.");
+        if (showToast) celebrate("☁️ Progreso sincronizado");
+      } catch {
+        setSyncStatus("Modo local", "No pude conectar con la nube; tu progreso local sigue seguro.");
+        render();
+      }
+    }
 
     notes.value = localStorage.getItem(notesKey) || "";
-    notes.addEventListener("input", () => localStorage.setItem(notesKey, notes.value));
+    notes.addEventListener("input", scheduleCloudSave);
 
     function idFor(level, index) {
       return `L${level}-V${index}`;
@@ -648,7 +771,7 @@
           const checkbox = row.querySelector("input");
           checkbox.addEventListener("change", () => {
             state[id] = checkbox.checked;
-            localStorage.setItem(stateKey, JSON.stringify(state));
+            scheduleCloudSave();
 
             if (checkbox.checked) {
               celebrate(`🏆 Victoria desbloqueada: ${name}`, completed === module.victories.length - 1);
@@ -739,8 +862,8 @@
         const data = JSON.parse(await file.text());
         state = data.progress || {};
         notes.value = data.notes || "";
-        localStorage.setItem(stateKey, JSON.stringify(state));
-        localStorage.setItem(notesKey, notes.value);
+        persistLocal();
+        scheduleCloudSave();
         render();
         celebrate("✅ Progreso importado correctamente");
       } catch {
@@ -754,12 +877,31 @@
       if (!confirmation) return;
       state = {};
       notes.value = "";
-      localStorage.removeItem(stateKey);
-      localStorage.removeItem(notesKey);
+      persistLocal();
+      scheduleCloudSave();
       render();
     });
 
-    render();
+    document.getElementById("shareBtn").addEventListener("click", async () => {
+      const shareUrl = location.origin + location.pathname + "#sync=" + encodeURIComponent(syncToken);
+      try {
+        if (navigator.share) {
+          await navigator.share({
+            title: "JavaScript Quest",
+            text: "Abre este enlace en tu otro dispositivo para compartir el mismo progreso.",
+            url: shareUrl
+          });
+        } else {
+          await navigator.clipboard.writeText(shareUrl);
+          celebrate("📋 Enlace de sincronización copiado");
+        }
+      } catch {}
+    });
+
+    document.getElementById("syncNowBtn").addEventListener("click", () => loadCloud(true));
+    window.addEventListener("online", () => loadCloud(false));
+    window.addEventListener("beforeunload", persistLocal);
+    loadCloud(false);
   </script>
 </body>
 </html>
