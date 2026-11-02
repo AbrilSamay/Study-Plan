@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "Unísono · Tu música, contigo",
+  "version": "0.4.0",
+  "description": "Compara canciones de Spotify y YouTube Music con tu biblioteca local. Solo metadatos, sin descargar audio.",
+  "minimum_chrome_version": "120",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "icons": { "16": "interface/assets/icon-16.png", "32": "interface/assets/icon-32.png", "48": "interface/assets/icon-48.png", "128": "interface/assets/icon-128.png" },
+  "action": { "default_popup": "interface/popup.html", "default_title": "Unísono: capturar canciones visibles", "default_icon": { "16": "interface/assets/icon-16.png", "32": "interface/assets/icon-32.png" } },
+  "background": { "service_worker": "application/worker.js", "type": "module" },
+  "content_security_policy": { "extension_pages": "script-src 'self'; object-src 'none'; base-uri 'none'" }
+}

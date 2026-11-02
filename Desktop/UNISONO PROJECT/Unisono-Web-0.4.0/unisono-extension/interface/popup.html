@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+      Unísono
+    </title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body class="popup">
+    <header class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        ııı
+      </span>
+      <span>
+        unísono
+        <small>
+          TU MÚSICA, CONTIGO
+        </small>
+      </span>
+    </header>
+    <h1>
+      De tu playlist
+      <br>
+      a tu colección.
+    </h1>
+    <p>
+      Abre tus Me gusta o una lista en Spotify o YouTube Music. Capturaremos las canciones cargadas en esa página.
+    </p>
+    <button class="primary" id="capture">
+      Capturar canciones visibles
+      <span>
+        ↗
+      </span>
+    </button>
+    <p id="capture-status" role="status" aria-live="polite">
+      Desplázate por la lista y repite para añadir más. No se cuentan reproducciones al capturar.
+    </p>
+    <button id="dashboard" class="secondary">
+      Abrir mi colección →
+    </button>
+    <footer>
+      <span class="dot">
+      </span>
+      Solo metadatos · Sin descarga de audio
+    </footer>
+    <script type="module" src="popup.js">
+    </script>
+  </body>
+</html>

@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <title>
+      Tu colección · Unísono
+    </title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">
+      Ir al contenido
+    </a>
+    <aside class="sidebar">
+      <a class="brand" href="index.html" aria-label="Unísono, inicio">
+        <span class="brand-mark" aria-hidden="true">
+          ııı
+        </span>
+        <span>
+          unísono
+          <small>
+            TU MÚSICA, CONTIGO
+          </small>
+        </span>
+      </a>
+      <div class="workspace-label">
+        TU ESPACIO MUSICAL
+      </div>
+      <nav aria-label="Principal">
+        <button data-view="discover" class="nav-button active">
+          <span aria-hidden="true">
+            ✧
+          </span>
+          Por descubrir
+          <span class="nav-count" id="nav-count">
+            0
+          </span>
+        </button>
+        <button data-view="library" class="nav-button">
+          <span aria-hidden="true">
+            ▤
+          </span>
+          Mi biblioteca
+        </button>
+        <button data-view="sources" class="nav-button">
+          <span aria-hidden="true">
+            ⇄
+          </span>
+          Mis fuentes
+        </button>
+        <button data-view="settings" class="nav-button">
+          <span aria-hidden="true">
+            ⚙
+          </span>
+          Preferencias
+        </button>
+      </nav>
+      <div class="sidebar-note">
+        <span class="tiny-symbol">
+          ◎
+        </span>
+        <strong>
+          La música es tuya.
+          <br>
+          Tu información también.
+        </strong>
+        <p>
+          Tu biblioteca se compara aquí, en tu navegador.
+        </p>
+        <span class="privacy-tag">
+          <span class="dot">
+          </span>
+          LOCAL Y PRIVADO
+        </span>
+      </div>
+      <div class="sidebar-footer">
+        UNÍSONO
+        <span>
+          WEB · 0.4.0
+        </span>
+      </div>
+    </aside>
+    <div class="shell">
+      <header class="topbar">
+        <span>
+          Mi espacio
+          <span class="breadcrumb">
+            /
+          </span>
+          <strong id="breadcrumb">
+            Por descubrir
+          </strong>
+        </span>
+        <div class="local-pill">
+          <span class="dot">
+          </span>
+          Guardado en este dispositivo
+        </div>
+      </header>
+      <main id="main" tabindex="-1">
+        <div id="demo-banner" class="notice" hidden>
+          Estás explorando datos de ejemplo. Tus datos reales no se modifican.
+          <button id="exit-demo">
+            Salir del ejemplo
+          </button>
+        </div>
+        <div id="message" class="notice" role="status" aria-live="polite" hidden>
+        </div>
+        <section id="view-discover" class="view">
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">
+                MENOS DUPLICADOS. MÁS MÚSICA.
+              </div>
+              <h1>
+                Tu próxima gran colección.
+              </h1>
+              <p>
+                Las canciones que te gustan. Solo las que te faltan.
+              </p>
+            </div>
+            <button class="secondary" data-action="sources">
+              ＋ Añadir canciones
+            </button>
+          </div>
+          <section class="hero" aria-labelledby="hero-title">
+            <div class="hero-copy">
+              <span class="label-pill">
+                EN SINTONÍA CONTIGO
+              </span>
+              <h2 id="hero-title">
+                Tus favoritas merecen
+                <br>
+                un lugar en tu biblioteca.
+              </h2>
+              <p>
+                Conecta lo que escuchas con lo que ya tienes.
+                <br>
+                Unísono te ayuda a descubrir qué falta.
+              </p>
+              <button class="primary" data-action="folder">
+                Elegir mi carpeta de música
+                <span>
+                  ↗
+                </span>
+              </button>
+              <span class="hero-caption">
+                Tus archivos permanecen en tu dispositivo.
+              </span>
+            </div>
+            <div class="record-art" aria-hidden="true">
+              <div class="orbit orbit-one">
+              </div>
+              <div class="orbit orbit-two">
+              </div>
+              <div class="sleeve">
+                <span>
+                  unísono
+                  <br>
+                  <small>
+                    THE LOCAL COLLECTION
+                  </small>
+                </span>
+                <div class="sleeve-wave">
+                </div>
+                <span class="sleeve-bottom">
+                  SIDE A
+                  <b>
+                    VOL. 01
+                  </b>
+                </span>
+              </div>
+              <div class="record">
+                <div class="record-label">
+                  u
+                  <span>
+                    ●
+                  </span>
+                </div>
+              </div>
+              <span class="floating-note">
+                ♫
+              </span>
+            </div>
+          </section>
+          <div class="stats" aria-label="Resumen de la colección">
+            <div class="stat">
+              <span class="stat-icon lavender">
+                ♡
+              </span>
+              <div>
+                <span>
+                  Canciones guardadas
+                </span>
+                <strong id="stat-total">
+                  0
+                </strong>
+              </div>
+              <small>
+                De tus fuentes
+              </small>
+            </div>
+            <div class="stat">
+              <span class="stat-icon mint">
+                ✓
+              </span>
+              <div>
+                <span>
+                  Ya en tu biblioteca
+                </span>
+                <strong id="stat-owned">
+                  0
+                </strong>
+              </div>
+              <small>
+                Sin duplicarlas
+              </small>
+            </div>
+            <div class="stat">
+              <span class="stat-icon peach">
+                ↗
+              </span>
+              <div>
+                <span>
+                  Por completar
+                </span>
+                <strong id="stat-missing">
+                  0
+                </strong>
+              </div>
+              <small id="review-count">
+                0 por revisar
+              </small>
+            </div>
+          </div>
+          <section class="collection-panel" aria-labelledby="list-title">
+            <div class="section-heading">
+              <div>
+                <h2 id="list-title">
+                  Un paso más cerca de tu música
+                  <span id="result-count" class="count-badge">
+                    0
+                  </span>
+                </h2>
+                <p id="scan-summary">
+                  Elige tu carpeta para saber qué canciones te faltan.
+                </p>
+              </div>
+              <button id="export" class="text-button">
+                Exportar pendientes ↗
+              </button>
+            </div>
+            <div class="toolbar">
+              <div class="tabs" role="group" aria-label="Estado de las canciones">
+                <button class="tab active" data-status="missing" aria-pressed="true">
+                  Me faltan
+                </button>
+                <button class="tab" data-status="review" aria-pressed="false">
+                  Por revisar
+                </button>
+                <button class="tab" data-status="owned" aria-pressed="false">
+                  Ya las tengo
+                </button>
+                <button class="tab" data-status="all" aria-pressed="false">
+                  Todas
+                </button>
+              </div>
+              <label class="search">
+                <span aria-hidden="true">
+                  ⌕
+                </span>
+                <input id="search" type="search" placeholder="Buscar canción o artista" aria-label="Buscar canción o artista">
+              </label>
+            </div>
+            <div class="filter-line">
+              <label>
+                Fuente
+                <select id="source-filter">
+                  <option value="all">
+                    Todas las fuentes
+                  </option>
+                  <option value="spotify">
+                    Spotify
+                  </option>
+                  <option value="youtube">
+                    YouTube Music
+                  </option>
+                  <option value="import">
+                    Archivo importado
+                  </option>
+                </select>
+              </label>
+              <label>
+                Señal
+                <select id="signal-filter">
+                  <option value="all">
+                    Todas
+                  </option>
+                  <option value="liked">
+                    Me gusta
+                  </option>
+                  <option value="frequent">
+                    Con escuchas en historial
+                  </option>
+                </select>
+              </label>
+              <span id="list-caption">
+                Prioridad: Me gusta y escuchas importadas
+              </span>
+            </div>
+            <div id="track-list">
+            </div>
+            <footer class="panel-footer">
+              <span>
+                <span class="dot">
+                </span>
+                Solo metadatos. Sin descargas de audio.
+              </span>
+              <span>
+                Una colección, sin repeticiones.
+              </span>
+            </footer>
+          </section>
+        </section>
+        <section id="view-library" class="view" hidden>
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">
+                TU COLECCIÓN, EN CASA
+              </div>
+              <h1>
+                Mi biblioteca.
+              </h1>
+              <p>
+                Un índice de tus archivos, sin subir tu música.
+              </p>
+            </div>
+            <button class="primary" data-action="folder">
+              Revisar carpeta ↗
+            </button>
+          </div>
+          <div class="notice">
+            Cada revisión reemplaza el índice anterior. Elige la carpeta raíz que contiene toda tu música. Si añades, mueves o borras archivos, revísala de nuevo.
+          </div>
+          <div id="library-summary" class="library-summary">
+          </div>
+          <div class="collection-panel" id="library-list">
+          </div>
+        </section>
+        <section id="view-sources" class="view" hidden>
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">
+                EL PUNTO DE PARTIDA
+              </div>
+              <h1>
+                Lo que escuchas, reunido.
+              </h1>
+              <p>
+                Añade tus favoritas y cruza tu historial con tu biblioteca.
+              </p>
+            </div>
+          </div>
+          <div class="source-grid">
+            <article class="source-card">
+              <div class="service-icon spotify">
+                ≋
+              </div>
+              <span class="tag">
+                CAPTURA MANUAL
+              </span>
+              <h2>
+                Spotify
+              </h2>
+              <p>
+                Abre tus Me gusta o una playlist. Pulsa el icono de Unísono en Chrome y captura las canciones cargadas.
+              </p>
+              <a class="secondary" href="https://open.spotify.com/collection/tracks" target="_blank" rel="noopener noreferrer">
+                Abrir mis Me gusta ↗
+              </a>
+            </article>
+            <article class="source-card">
+              <div class="service-icon youtube">
+                ▷
+              </div>
+              <span class="tag">
+                CAPTURA MANUAL
+              </span>
+              <h2>
+                YouTube Music
+              </h2>
+              <p>
+                Abre la lista de canciones que te gustan. Desplázate y repite la captura para añadir más canciones.
+              </p>
+              <a class="secondary" href="https://music.youtube.com/playlist?list=LM" target="_blank" rel="noopener noreferrer">
+                Abrir mis Me gusta ↗
+              </a>
+            </article>
+          </div>
+          <article class="import-card">
+            <div>
+              <div class="eyebrow">
+                TUS ESCUCHAS CUENTAN
+              </div>
+              <h2>
+                Trae tu historial.
+              </h2>
+              <p>
+                Importa el historial JSON de Spotify o una lista CSV / JSON. Selecciona juntos todos los archivos del historial para calcular las escuchas y evitar eventos repetidos.
+              </p>
+              <p class="muted">
+                Se cuentan eventos de al menos 30 segundos. Reimportar conserva el mayor conteo por canción; no suma dos veces el mismo historial.
+              </p>
+            </div>
+            <button class="primary" data-action="import">
+              Importar archivos ↗
+            </button>
+          </article>
+          <details class="help">
+            <summary>
+              Formatos, alcance y privacidad
+            </summary>
+            <p>
+              CSV: columnas
+              <code>
+                title,artist,album,source,liked,plays,url
+              </code>
+              . JSON: lista con esos mismos campos. Solo title es obligatorio. source acepta spotify, youtube o import. liked acepta true o false.
+            </p>
+            <p>
+              También se admite el historial Spotify extendido (master_metadata_track_name, master_metadata_album_artist_name, ts, ms_played) y el básico (trackName, artistName, endTime, msPlayed). No se interpreta el historial Google Takeout en esta versión.
+            </p>
+            <p>
+              La captura solo lee filas cargadas y no observa tu reproducción en segundo plano. Los Me gusta se detectan por la lista oficial, no por estar en cualquier playlist. No se obtiene un historial completo desde la página. Los selectores pueden necesitar ajustes si las plataformas cambian.
+            </p>
+            <p>
+              No se piden contraseñas, cookies ni claves API. No hay telemetría ni servidor. La extensión guarda títulos, artistas, rutas relativas y tus decisiones en este perfil de Chrome.
+            </p>
+          </details>
+          <p id="capture-summary" class="muted">
+          </p>
+        </section>
+        <section id="view-settings" class="view" hidden>
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">
+                A TU MANERA
+              </div>
+              <h1>
+                Un espacio sencillo.
+              </h1>
+              <p>
+                Tú decides qué entra y qué se queda.
+              </p>
+            </div>
+          </div>
+          <article class="settings-row">
+            <div>
+              <h2>
+                Explorar un ejemplo
+              </h2>
+              <p>
+                Conoce el recorrido con canciones ficticias, sin cambiar tu colección.
+              </p>
+            </div>
+            <button class="secondary" id="demo">
+              Ver ejemplo
+            </button>
+          </article>
+          <article class="settings-row">
+            <div>
+              <h2>
+                Los archivos siempre están contigo
+              </h2>
+              <p>
+                Se leen etiquetas MP3 (ID3v1 / ID3v2.3 / ID3v2.4 sencillas) y FLAC. Para los demás formatos o etiquetas no compatibles, se usa el nombre «Artista - Canción» y se pide revisión. No se usan huellas acústicas.
+              </p>
+            </div>
+          </article>
+          <article class="settings-row">
+            <div>
+              <h2>
+                Borrar datos de Unísono
+              </h2>
+              <p>
+                Elimina el índice, canciones y decisiones de este perfil. No elimina tus archivos musicales.
+              </p>
+            </div>
+            <button class="danger" id="clear">
+              Borrar mis datos
+            </button>
+          </article>
+        </section>
+        <footer class="main-footer">
+          <span>
+            Hecho para escuchar. Diseñado para coleccionar.
+          </span>
+          <span>
+            unísono
+            <span class="footer-wave">
+              ııı
+            </span>
+          </span>
+        </footer>
+      </main>
+    </div>
+    <input id="folder-input" type="file" webkitdirectory multiple hidden>
+    <input id="import-input" type="file" accept=".json,.csv" multiple hidden>
+    <dialog id="review-dialog">
+      <div class="dialog-heading">
+        <h2>
+          ¿Es la misma canción?
+        </h2>
+        <button id="close-review" class="icon-button" aria-label="Cerrar">
+          ×
+        </button>
+      </div>
+      <p id="review-title">
+      </p>
+      <p>
+        Comprueba artista y versión. Confirmar vincula la canción con este archivo en tu última revisión.
+      </p>
+      <div id="candidates">
+      </div>
+      <button id="mark-missing" class="secondary">
+        Ninguno: me falta esta canción
+      </button>
+    </dialog>
+    <dialog id="clear-dialog">
+      <h2>
+        ¿Borrar tus datos de Unísono?
+      </h2>
+      <p>
+        Se eliminarán las canciones, el índice local y tus confirmaciones. Esta acción no se puede deshacer.
+      </p>
+      <div class="dialog-actions">
+        <button class="secondary" id="cancel-clear">
+          Cancelar
+        </button>
+        <button class="danger" id="confirm-clear">
+          Sí, borrar datos
+        </button>
+      </div>
+    </dialog>
+    <script type="module" src="app.js">
+    </script>
+  </body>
+</html>
